@@ -1,46 +1,55 @@
-.editor-title {
+.editor-header {
     position: absolute;
     display: flex;
-    top: -0.6rem;
+    top: -1.2rem;
     width: 100%;
 
-    &::before {
-        content: "";
-        background-color: rgb(20 20 20);
-        transform: translateX(-50%);
-        width: calc(100% - 0.45rem);
-        border-top-left-radius: 0.3rem;
-        border-top-right-radius: 0.3rem;
-        position: absolute;
-        display: block;
-        height: 1rem;
-        top: 0.8rem;
-        left: 50%;
-        z-index: 2;
-    }
-    
-    h1 {
-        padding: 0 0.4rem;
+    .editor-title {
+        position: relative;
         margin: 0 0 0 1.25rem;
 
-        background-color: rgb(20 20 20);
-        font-size: 1rem;
-        z-index: 3;
-    }
+        h1 {
+            position: relative;
+            padding: 0 0.4rem;
+            font-size: 1rem;
+            z-index: 3;
+        }
 
+        &::before {
+            content: "";
+            background-color: rgb(20 20 20);
+            transform: translateY(-50%);
+            position: absolute;
+            height: 0.4rem;
+            width: 100%;
+            z-index: 2;
+            top: 50%;
+        }
+    }
+    
     #options {
-        background-color: rgb(20 20 20);
         display: inline-flex;
-        position: relative;
         margin-left: 4rem;
-        z-index: 3;
 
         button {
             background-color: transparent;
+            margin-top: 0.1rem;
+            position: relative;
             cursor: pointer;
             outline: none;
             border: none;
             padding: 0;
+
+            &::before {
+                content: "";
+                background-color: rgb(20 20 20);
+                transform: translateY(-50%);
+                position: absolute;
+                height: 0.4rem;
+                width: 100%;
+                z-index: 2;
+                top: 50%;
+            }
             
             &:hover, &:focus {
                 img {
@@ -55,9 +64,10 @@
             }
     
             img {
-                
-                opacity: 0.6;
+                position: relative;
                 height: 1.5rem;
+                opacity: 0.6;
+                z-index: 3;
             }
         }
 
