@@ -1,0 +1,32 @@
+@import url("./title.css");
+@import url("./editor.css");
+@import url("./input-output.css");
+
+@font-face {
+    font-family: "syne-mono";
+    src: url("./fonts/Syne_Mono/SyneMono-Regular.ttf");
+}
+
+html, body {
+    background-color: rgb(20 20 20);
+    color: rgb(230 230 230);
+    font-family: "syne-mono";
+    user-select: none;
+    position: fixed;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.box {
+    box-sizing: border-box;
+    padding: 0.5rem 1rem;
+    height: 100%;
+    width: 100%;
+}
+
+.editor-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}

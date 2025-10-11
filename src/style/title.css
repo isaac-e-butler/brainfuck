@@ -1,0 +1,68 @@
+.editor-title {
+    position: absolute;
+    display: flex;
+    top: -0.6rem;
+    width: 100%;
+
+    &::before {
+        content: "";
+        background-color: rgb(20 20 20);
+        transform: translateX(-50%);
+        width: calc(100% - 0.45rem);
+        border-top-left-radius: 0.3rem;
+        border-top-right-radius: 0.3rem;
+        position: absolute;
+        display: block;
+        height: 1rem;
+        top: 0.8rem;
+        left: 50%;
+        z-index: 2;
+    }
+    
+    h1 {
+        padding: 0 0.4rem;
+        margin: 0 0 0 1.25rem;
+
+        background-color: rgb(20 20 20);
+        font-size: 1rem;
+        z-index: 3;
+    }
+
+    #options {
+        background-color: rgb(20 20 20);
+        display: inline-flex;
+        position: relative;
+        margin-left: 4rem;
+        z-index: 3;
+
+        button {
+            background-color: transparent;
+            cursor: pointer;
+            outline: none;
+            border: none;
+            padding: 0;
+            
+            &:hover, &:focus {
+                img {
+                    opacity: 1;
+                }
+            }
+    
+            &:active {
+                img {
+                    opacity: 0.3;
+                }
+            }
+    
+            img {
+                
+                opacity: 0.6;
+                height: 1.5rem;
+            }
+        }
+
+        & > :last-child {
+            padding-right: 0.1rem;
+        }
+    }
+}

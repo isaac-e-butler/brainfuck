@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Brainf*ck</title>
+        <link href="./src/style/index.css" type="text/css" rel="stylesheet" />
+        <script src="./src/scripts/index.js" type="module"></script>
+    </head>
+    <body>
+        <div class="box">
+            <div class="editor-container">
+                <div class="editor-title">
+                    <h1>Brainf*ck</h1>
+                    <div id="options">
+                        <button id="play"><img src="./src/icons/play.svg" /></button>
+                    </div>
+                </div>
+                <div id="editor"></div>
+            </div>
+            <div id="output">output</div>
+            <form id="input-form">
+                <!-- disable the input when not needed -->
+                <input
+                    id="input"
+                    name="input"
+                    placeholder="input"
+                    title="Please enter a number or singular character; singular numbers can be escaped using '\' for their character code;"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                />
+                <button id="input-submit" form="input" value="Submit"></button>
+            </form>
+        </div>
+    </body>
+</html>
