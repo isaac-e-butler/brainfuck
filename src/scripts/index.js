@@ -1,14 +1,11 @@
-import { inputForm, playButton, output, icons } from "./common.js";
 import { processInstructions, runProgram } from "./runtime/index.js";
-import Editor from "./editor/editor.js";
+import { editor, status, inputForm, playButton, output, icons } from "./global.js";
 
 inputForm.addEventListener("submit", (event) => {
     event.preventDefault();
 });
 
-const editor = new Editor();
-
-async function run() {
+async function startProgram() {
     const abort = new AbortController();
 
     function abortProgram() {
@@ -16,29 +13,37 @@ async function run() {
     }
 
     try {
-        const programInstruction = processInstructions(editor);
+        status.clearLogs();
+        const instructions = processInstructions(editor);
 
-        console.log("starting program:", programInstruction);
+        if (!instructions) {
+            status.attachWarning("Failed to load program - no instructions found");
+            return undefined;
+        } else {
+            status.attachInfo("Starting program:", instructions);
+        }
 
         output.innerText = "";
-        playButton.removeEventListener("click", run);
+        playButton.removeEventListener("click", startProgram);
         playButton.firstChild.src = icons.stop;
         playButton.addEventListener("click", abortProgram);
 
-        const success = await runProgram(programInstruction, abort);
+        const success = await runProgram(instructions, abort);
 
         if (success) {
-            console.log("end of program");
+            status.attachInfo("Program exited successfully");
         } else {
-            console.log("program aborted");
+            status.attachWarning("Program aborted");
         }
     } catch (error) {
-        console.error("FATAL ERROR:", error);
+        status.attachError("Unexpected error occurred:", error.toString());
     } finally {
         playButton.removeEventListener("click", abortProgram);
         playButton.firstChild.src = icons.play;
-        playButton.addEventListener("click", run);
+        playButton.addEventListener("click", startProgram);
+
+        status.attachInfo("Process terminated");
     }
 }
 
-playButton.addEventListener("click", run);
+playButton.addEventListener("click", startProgram);

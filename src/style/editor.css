@@ -53,6 +53,7 @@
                 }
 
                 &::before {
+                    background-color: rgb(20 20 20);
                     content: counter(line-number);
                     padding-right: 1.25rem;
                     text-align: right;

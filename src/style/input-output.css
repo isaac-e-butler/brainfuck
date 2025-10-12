@@ -31,7 +31,21 @@
 }
 
 #status {
+    display: flex;
+    flex-direction: column;
     max-height: 5rem;
+
+    .info {
+        color: rgb(230, 230, 230);
+    }
+
+    .warning {
+        color: rgb(255, 200, 100);
+    }
+
+    .error {
+        color: rgb(255, 100, 100);
+    }
 }
 
 #input-form {

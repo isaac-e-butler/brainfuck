@@ -1,13 +1,14 @@
-import { inputForm } from "../common.js";
+import { inputForm, status } from "../global.js";
 
 export const abortReadMessage = "ABORT_READ";
 
 function parseInput(target) {
     const value = Object.fromEntries(new FormData(target)).input.trim();
-    const numeric = parseInt(value);
 
-    if (Number.isSafeInteger(numeric)) {
-        return numeric;
+    if (value.length > 1 && value.startsWith("\\")) {
+        const numeric = parseInt(value.substring(1));
+
+        return Number.isSafeInteger(numeric) ? numeric : undefined;
     }
 
     if (value.length <= 1) {
@@ -44,10 +45,7 @@ async function readInput(abort) {
             if (parsedValue) {
                 cleanResolveWith(parsedValue);
             } else {
-                console.warn(
-                    "Please enter a number or singular character; singular numbers can be escaped using '\\' for their character code;"
-                );
-
+                status.attachWarning("Please enter a singular character - raw numbers can be escaped using '\\'");
                 inputForm.reset();
             }
         }
