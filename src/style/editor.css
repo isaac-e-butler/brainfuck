@@ -2,6 +2,18 @@
     counter-reset: line-number;
 }
 
+.editor-container {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    width: 100%;
+
+    @media (min-width: 55rem) {
+        width: 50%;
+    }
+}
+
 #editor {
     border: 0.2rem solid rgb(200, 200, 200);
     border-radius: 0.5rem;
