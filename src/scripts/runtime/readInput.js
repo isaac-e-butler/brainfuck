@@ -45,7 +45,7 @@ async function readInput(abort) {
             if (parsedValue) {
                 cleanResolveWith(parsedValue);
             } else {
-                status.attachWarning("Please enter a singular character - raw numbers can be escaped using '\\'");
+                status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
                 inputForm.reset();
             }
         }
