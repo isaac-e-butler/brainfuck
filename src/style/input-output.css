@@ -1,28 +1,40 @@
 .input-output-container {
     position: relative;
+    flex-direction: column;
+    display: flex;
+    gap: 1.25rem;
     height: 100%;
     width: 100%;
 
     @media (min-width: 55rem) {
         width: 50%;
     }
-}
-
-#output {
-    background-color: black;
-    padding: 0.3rem 0.6rem;
-    min-height: 4.55rem;
-    font-size: 0.8rem;
-    display: block;
-    width: 100%;
 
     @media (min-width: 55rem) {
-        margin: 0.5rem 0 0 0;
+        & > :first-child {
+            margin: 0.5rem 0 0 0;
+        }
     }
 }
 
+.console {
+    display: block;
+    overflow: auto;
+    background-color: black;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+}
+
+#output {
+    min-height: 5rem;
+    max-height: 10rem;
+}
+
+#status {
+    max-height: 5rem;
+}
+
 #input-form {
-    margin-top: 1.25rem;
     display: flex;
 
     &.focus {

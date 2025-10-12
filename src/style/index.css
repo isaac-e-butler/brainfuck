@@ -12,6 +12,7 @@ html, body {
     color: rgb(230 230 230);
     font-family: "syne-mono";
     user-select: none;
+    position: fixed;
     width: 100%;
     padding: 0;
     margin: 0;
