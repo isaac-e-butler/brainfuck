@@ -1,7 +1,3 @@
-.counter {
-    counter-reset: line-number;
-}
-
 .editor-container {
     position: relative;
     min-width: 0;
@@ -12,87 +8,87 @@
     @media (min-width: 55rem) {
         width: 50%;
     }
-}
-
-#editor {
-    margin: 0.5rem 0 0 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.editor-status {
-    background-color: rgb(35 35 35);
-    flex-direction: row-reverse;
-    line-height: 0.8rem;
-    position: sticky;
-    display: flex;
-    height: 0.8rem;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-
-    .editor-status-text {
-        font-size: 0.75rem;
-        padding: 0 0.4rem;
-    }
-}
-
-.editor-content {
-    background-color: rgb(20 20 20);
-    padding: 1.25rem 0 1rem 0;
-    max-height: 25rem;
-    overflow: auto;
-    height: auto;
-    width: auto;
-
-    .line {
-        counter-increment: line-number;
-        border-bottom: 0.1rem solid transparent;
-        border-top: 0.1rem solid transparent;
+    
+    #editor {
+        margin: 0.5rem 0 0 0;
         position: relative;
-        line-height: 1rem;
-        white-space: pre;
-        font-size: 1rem;
-        display: flex;
-        cursor: text;
-        height: 1rem;
-        width: 100%;
+        overflow: hidden;
 
-        .editor-cursor {
-            border-left: 0.1rem solid transparent;
-            height: 100%;
+        .editor-content {
+            background-color: rgb(20 20 20);
+            padding: 1.25rem 0 1rem 0;
+            max-height: 25rem;
+            overflow: auto;
+            height: auto;
+            width: auto;
+
+            .line {
+                counter-increment: line-number;
+                border-bottom: 0.1rem solid transparent;
+                border-top: 0.1rem solid transparent;
+                position: relative;
+                line-height: 1rem;
+                white-space: pre;
+                font-size: 1rem;
+                display: flex;
+                cursor: text;
+                height: 1rem;
+                width: 100%;
+
+                .editor-cursor {
+                    border-left: 0.1rem solid transparent;
+                    height: 100%;
+                }
+
+                &:focus {
+                    outline: none;
+
+                    &::before {
+                        color: white;
+                    }
+
+                    .editor-cursor {
+                        border-color: white;
+                    }
+                }
+
+                &::before {
+                    content: counter(line-number);
+                    padding-right: 1.25rem;
+                    text-align: right;
+                    position: sticky;
+                    flex-shrink: 0;
+                    display: grid;
+                    color: grey;
+                    width: 2.5rem;
+                    z-index: 1;
+                    left: 0;
+                }
+
+                &::after {
+                    content: "";
+                    flex-shrink: 0;
+                    display: grid;
+                    width: 2.5rem;
+                }
+            }
         }
 
-        &:focus {
-            outline: none;
-
-            &::before {
-                color: white;
-            }
-
-            .editor-cursor {
-                border-color: white;
-            }
-        }
-
-        &::before {
-            content: counter(line-number);
-            padding-right: 1.25rem;
-            text-align: right;
+        .editor-status {
+            background-color: rgb(35 35 35);
+            flex-direction: row-reverse;
+            line-height: 0.8rem;
             position: sticky;
-            flex-shrink: 0;
-            display: grid;
-            color: grey;
-            width: 2.5rem;
-            z-index: 1;
+            display: flex;
+            height: 0.8rem;
+            width: 100%;
+            bottom: 0;
             left: 0;
-        }
 
-        &::after {
-            content: "";
-            flex-shrink: 0;
-            display: grid;
-            width: 2.5rem;
+            .editor-status-text {
+                font-size: 0.75rem;
+                padding: 0 0.4rem;
+            }
         }
     }
 }
