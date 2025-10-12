@@ -15,10 +15,10 @@
                         <button id="play"><img src="./src/icons/states/play.svg" /></button>
                     </div>
                 </div>
-                <div id="editor"></div>
+                <div id="editor" class="border"></div>
             </div>
             <div class="input-output-container">
-                <div id="output">output</div>
+                <div id="output" class="border">output</div>
                 <form id="input-form">
                     <!-- disable the input when not needed -->
                     <input
@@ -30,8 +30,9 @@
                         autocorrect="off"
                         autocapitalize="off"
                         spellcheck="false"
+                        class="border-left-only"
                     />
-                    <button id="input-submit" form="input" value="Submit"></button>
+                    <button id="input-submit" form="input" value="Submit" class="border-right-only"></button>
                 </form>
             </div>
         </div>

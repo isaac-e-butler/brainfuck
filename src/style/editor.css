@@ -15,11 +15,8 @@
 }
 
 #editor {
-    border: 0.2rem solid rgb(200, 200, 200);
-    border-radius: 0.5rem;
-    position: relative;
     margin: 0.5rem 0 0 0;
-    box-sizing: border-box;
+    position: relative;
     overflow: hidden;
 }
 

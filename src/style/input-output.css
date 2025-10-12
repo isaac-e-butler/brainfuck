@@ -9,11 +9,8 @@
 }
 
 #output {
-    border: 0.2rem solid rgb(200, 200, 200);
-    border-radius: 0.5rem;
     background-color: black;
     padding: 0.3rem 0.6rem;
-    box-sizing: border-box;
     min-height: 4.55rem;
     font-size: 0.8rem;
     display: block;
@@ -35,14 +32,9 @@
     }
 
     #input {
-        border: 0.2rem solid rgb(200, 200, 200);
-        border-bottom-left-radius: 0.5rem;
-        border-top-left-radius: 0.5rem;
-        
         background-color: rgb(40, 40, 40);
         color: rgb(230 230 230);
         font-family: "syne-mono";
-        box-sizing: border-box;
         font-size: 0.8rem;
         padding: 0.5rem;
         outline: none;
@@ -51,9 +43,6 @@
     }
 
     #input-submit, #input-submit::before {
-        border-bottom-right-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-        box-sizing: border-box;
         font-size: 0.8rem;
         cursor: pointer;
         outline: none;
@@ -82,6 +71,8 @@
         }
 
         &::before {
+            border-radius: inherit;
+            box-sizing: border-box;
             background-color: rgb(220 220 220);
             transform: translate(-50%, -65%);
             font-family: "syne-mono";
