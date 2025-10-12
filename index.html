@@ -15,23 +15,25 @@
                         <button id="play"><img src="./src/icons/states/play.svg" /></button>
                     </div>
                 </div>
-                <div id="editor"></div>
+                <div id="editor" class="border"></div>
             </div>
             <div class="input-output-container">
-                <div id="output">output</div>
+                <div id="status" class="border console">status</div>
+                <div id="output" class="border console">output</div>
                 <form id="input-form">
                     <!-- disable the input when not needed -->
                     <input
                         id="input"
                         name="input"
                         placeholder="input"
-                        title="Please enter a number or singular character; singular numbers can be escaped using '\' for their character code;"
+                        class="border-left-only"
+                        title="Please enter a singular character - raw numbers can be escaped using '\'"
                         autocomplete="off"
                         autocorrect="off"
                         autocapitalize="off"
                         spellcheck="false"
                     />
-                    <button id="input-submit" form="input" value="Submit"></button>
+                    <button id="input-submit" class="border-right-only" type="submit" value="Submit"></button>
                 </form>
             </div>
         </div>

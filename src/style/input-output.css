@@ -1,31 +1,54 @@
 .input-output-container {
     position: relative;
+    flex-direction: column;
+    display: flex;
+    gap: 1.25rem;
     height: 100%;
     width: 100%;
 
     @media (min-width: 55rem) {
         width: 50%;
     }
+
+    @media (min-width: 55rem) {
+        & > :first-child {
+            margin: 0.5rem 0 0 0;
+        }
+    }
+}
+
+.console {
+    display: block;
+    overflow: auto;
+    background-color: black;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
 }
 
 #output {
-    border: 0.2rem solid rgb(200, 200, 200);
-    border-radius: 0.5rem;
-    background-color: black;
-    padding: 0.3rem 0.6rem;
-    box-sizing: border-box;
-    min-height: 4.55rem;
-    font-size: 0.8rem;
-    display: block;
-    width: 100%;
+    min-height: 5rem;
+    max-height: 10rem;
+}
 
-    @media (min-width: 55rem) {
-        margin: 0.5rem 0 0 0;
+#status {
+    display: flex;
+    flex-direction: column;
+    max-height: 5rem;
+
+    .info {
+        color: rgb(230, 230, 230);
+    }
+
+    .warning {
+        color: rgb(255, 200, 100);
+    }
+
+    .error {
+        color: rgb(255, 100, 100);
     }
 }
 
 #input-form {
-    margin-top: 1.25rem;
     display: flex;
 
     &.focus {
@@ -35,14 +58,9 @@
     }
 
     #input {
-        border: 0.2rem solid rgb(200, 200, 200);
-        border-bottom-left-radius: 0.5rem;
-        border-top-left-radius: 0.5rem;
-        
         background-color: rgb(40, 40, 40);
         color: rgb(230 230 230);
         font-family: "syne-mono";
-        box-sizing: border-box;
         font-size: 0.8rem;
         padding: 0.5rem;
         outline: none;
@@ -51,9 +69,6 @@
     }
 
     #input-submit, #input-submit::before {
-        border-bottom-right-radius: 0.5rem;
-        border-top-right-radius: 0.5rem;
-        box-sizing: border-box;
         font-size: 0.8rem;
         cursor: pointer;
         outline: none;
@@ -82,6 +97,8 @@
         }
 
         &::before {
+            border-radius: inherit;
+            box-sizing: border-box;
             background-color: rgb(220 220 220);
             transform: translate(-50%, -65%);
             font-family: "syne-mono";

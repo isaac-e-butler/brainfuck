@@ -18,7 +18,11 @@ class System {
         this.pointer--;
 
         if (this.pointer < 0) {
-            throw new Error("memory overflow: pointer below 0");
+            throw new Error(
+                `Memory overflow exception - instruction at position '${
+                    this.counter + 1
+                }' caused the pointer to move below zero`
+            );
         }
     }
 

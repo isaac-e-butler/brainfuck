@@ -18,6 +18,22 @@ html, body {
     margin: 0;
 }
 
+.border, .border-left-only, .border-right-only  {
+    border: 0.2rem solid rgb(200, 200, 200);
+    border-radius: 0.5rem;
+    box-sizing: border-box;
+
+    &.border-left-only {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    &.border-right-only {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+    }
+}
+
 .container {
     display: flex;
     flex-direction: column;

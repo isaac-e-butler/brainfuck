@@ -1,4 +1,4 @@
-import { output, input, inputForm } from "../common.js";
+import { output, input, inputForm } from "../global.js";
 import readInput, { abortReadMessage } from "./readInput.js";
 import { syntax } from "./syntax.js";
 import System from "./System.js";
@@ -30,11 +30,10 @@ async function runProgram(instructions, abort) {
                 const value = system.getValueAtPointer();
 
                 if (value === 32) {
-                    output.innerText += String.fromCharCode(160); // space
+                    output.innerText += String.fromCharCode(160); // space code
                 } else {
                     output.innerText += String.fromCharCode(value);
                 }
-                console.log(system.memory);
                 break;
             case syntax.input:
                 input.focus();

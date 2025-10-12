@@ -1,6 +1,6 @@
 import { handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
 
-class Editor {
+export class Editor {
     constructor() {
         this.content = document.createElement("div");
         this.content.className = "editor-content";
@@ -239,5 +239,3 @@ class Editor {
         this.container.removeChild(this.content);
     }
 }
-
-export default Editor;
