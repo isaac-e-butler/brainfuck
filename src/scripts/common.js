@@ -6,6 +6,6 @@ export const input = document.getElementById("input");
 export const inputForm = document.getElementById("input-form");
 
 export const icons = {
-    stop: "./src/icons/stop.svg",
-    play: "./src/icons/play.svg",
+    stop: "./src/icons/states/stop.svg",
+    play: "./src/icons/states/play.svg",
 };
