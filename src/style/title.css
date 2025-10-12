@@ -1,7 +1,7 @@
 .editor-header {
     position: absolute;
     display: flex;
-    top: -1.2rem;
+    top: -0.675rem;
     width: 100%;
 
     .editor-title {
@@ -33,7 +33,6 @@
 
         button {
             background-color: transparent;
-            margin-top: 0.1rem;
             position: relative;
             cursor: pointer;
             outline: none;
