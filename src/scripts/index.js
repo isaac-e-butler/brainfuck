@@ -33,7 +33,7 @@ async function startProgram() {
         if (success) {
             status.attachInfo("Program exited successfully");
         } else {
-            status.attachWarning("Program aborted");
+            status.attachError("Program was aborted");
         }
     } catch (error) {
         status.attachError("Unexpected error occurred:", error.toString());

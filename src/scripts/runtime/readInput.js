@@ -1,4 +1,4 @@
-import { inputForm, status } from "../global.js";
+import { inputForm, input, status } from "../global.js";
 
 export const abortReadMessage = "ABORT_READ";
 
@@ -47,6 +47,7 @@ async function readInput(abort) {
             } else {
                 status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
                 inputForm.reset();
+                input.focus();
             }
         }
 
