@@ -31,13 +31,13 @@ class System {
     }
 
     startLoop() {
-        this.stack.push({ counter: this.counter, pointer: this.pointer });
+        this.stack.push({ counter: this.counter });
     }
 
     endLoop() {
         const stack = this.stack[this.stack.length - 1];
 
-        if (this.memory[stack.pointer] > 0) {
+        if (this.memory[this.pointer] > 0) {
             this.counter = stack.counter;
         } else {
             this.stack.pop();
