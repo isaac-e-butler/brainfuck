@@ -2,7 +2,8 @@ export function handlePasteEvent(editor, event) {
     event.stopPropagation();
     event.preventDefault();
 
-    if (event.target === input) return;
+    editor.debounceCursor();
+    editor.resetReceiver();
 
     const data = event.clipboardData.getData("text");
 

@@ -1,4 +1,4 @@
-import { handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
+import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
 
 export class Editor {
     constructor() {
@@ -8,8 +8,14 @@ export class Editor {
         this.status = document.createElement("div");
         this.status.className = "editor-status";
 
+        this.inputReceiver = document.createElement("textarea");
+        this.inputReceiver.className = "cursor-input-receiver";
+        this.inputReceiver.id = "cursor-input-receiver";
+
         this.cursor = document.createElement("div");
         this.cursor.className = "editor-cursor";
+        this.cursor.appendChild(this.inputReceiver);
+
         this.cursorPosition = new Proxy(
             {
                 line: 0,
@@ -56,23 +62,27 @@ export class Editor {
 
         const line = this.insertLine();
         line.appendChild(this.cursor);
-        this.focus(line);
+        line.classList.add("line-focused");
+        this.focusedLine = line;
 
         this.container = document.getElementById("editor");
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
 
-        this.content.addEventListener("paste", (event) => handlePasteEvent(this, event));
-        this.content.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.content.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
+        this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
+        this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
+        this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
+
+        this.moveToCursor();
     }
 
     insertLine() {
         const line = document.createElement("div");
         line.className = "line";
         line.tabIndex = -1;
-        this.content.appendChild(line);
 
+        this.content.appendChild(line);
         return line;
     }
 
@@ -106,8 +116,8 @@ export class Editor {
         this.moveCursor("right");
     }
 
-    remove(line, direction) {
-        if (!line) return;
+    remove(direction) {
+        const line = this.cursor.parentElement;
 
         switch (direction) {
             case "left": {
@@ -130,12 +140,27 @@ export class Editor {
                 break;
             }
         }
+
+        this.moveToCursor();
     }
 
-    focus(element) {
-        if (!element) return;
+    focus(line) {
+        if (!line) return;
 
-        element.focus();
+        this.focusedLine.classList.remove("line-focused");
+        this.focusedLine = line;
+
+        line.classList.add("line-focused");
+    }
+
+    moveToCursor() {
+        this.content.scrollTo(this.cursor);
+        this.inputReceiver.focus();
+    }
+
+    resetReceiver() {
+        this.inputReceiver.value = "\u200B" + "\u200B";
+        this.inputReceiver.setSelectionRange(1, 1);
     }
 
     debounceCursor() {
@@ -167,6 +192,8 @@ export class Editor {
             this.cursorPosition.column = line.childNodes.length - 1;
             line.append(this.cursor);
         }
+
+        this.moveToCursor();
     }
 
     moveCursor(direction = undefined) {
@@ -233,9 +260,7 @@ export class Editor {
                 break;
             }
         }
-    }
 
-    destroy() {
-        this.container.removeChild(this.content);
+        this.moveToCursor();
     }
 }
