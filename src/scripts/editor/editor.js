@@ -2,8 +2,16 @@ import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } 
 
 export class Editor {
     constructor() {
+        this.lines = document.createElement("div");
+        this.lines.className = "editor-lines";
+
+        this.lineNumbers = document.createElement("div");
+        this.lineNumbers.className = "editor-line-numbers";
+
         this.content = document.createElement("div");
         this.content.className = "editor-content";
+        this.content.appendChild(this.lineNumbers);
+        this.content.appendChild(this.lines);
 
         this.status = document.createElement("div");
         this.status.className = "editor-status";
@@ -69,7 +77,7 @@ export class Editor {
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
 
-        this.content.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
+        this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
@@ -78,18 +86,25 @@ export class Editor {
     }
 
     insertLine() {
+        const lineNumber = document.createElement("div");
+        lineNumber.className = "line-number";
+        lineNumber.tabIndex = -1;
+        this.lineNumbers.appendChild(lineNumber);
+
         const line = document.createElement("div");
         line.className = "line";
         line.tabIndex = -1;
+        this.lines.appendChild(line);
 
-        this.content.appendChild(line);
         return line;
     }
 
     removeLine(line) {
         if (!line) return;
 
-        this.content.removeChild(line);
+        const lineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
+        this.lineNumbers.removeChild(lineNumber);
+        this.lines.removeChild(line);
     }
 
     insertChar(value) {
@@ -153,14 +168,13 @@ export class Editor {
         line.classList.add("line-focused");
     }
 
-    moveToCursor() {
-        this.content.scrollTo(this.cursor);
-        this.inputReceiver.focus();
-    }
-
     resetReceiver() {
         this.inputReceiver.value = "\u200B" + "\u200B";
         this.inputReceiver.setSelectionRange(1, 1);
+    }
+
+    moveToCursor() {
+        this.inputReceiver.focus();
     }
 
     debounceCursor() {
@@ -182,7 +196,7 @@ export class Editor {
 
         if (!line || !line.classList.contains("line")) return;
 
-        this.cursorPosition.line = Array.from(this.content.childNodes).indexOf(line);
+        this.cursorPosition.line = Array.from(this.lines.childNodes).indexOf(line);
         this.focus(line);
 
         if (char) {
