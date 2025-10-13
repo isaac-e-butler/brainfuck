@@ -14,7 +14,7 @@
         position: relative;
         overflow: hidden;
 
-        .editor-content {
+        .editor-lines {
             background-color: rgb(20 20 20);
             padding: 1.75rem 0 1.5rem 0;
             max-height: 25rem;

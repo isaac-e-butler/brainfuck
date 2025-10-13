@@ -2,8 +2,16 @@ import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } 
 
 export class Editor {
     constructor() {
+        this.lines = document.createElement("div");
+        this.lines.className = "editor-lines";
+
+        this.lineNumbers = document.createElement("div");
+        this.lineNumbers.className = "editor-line-numbers";
+
         this.content = document.createElement("div");
         this.content.className = "editor-content";
+        this.content.appendChild(this.lineNumbers);
+        this.content.appendChild(this.lines);
 
         this.status = document.createElement("div");
         this.status.className = "editor-status";
@@ -69,7 +77,7 @@ export class Editor {
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
 
-        this.content.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
+        this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
@@ -82,14 +90,14 @@ export class Editor {
         line.className = "line";
         line.tabIndex = -1;
 
-        this.content.appendChild(line);
+        this.lines.appendChild(line);
         return line;
     }
 
     removeLine(line) {
         if (!line) return;
 
-        this.content.removeChild(line);
+        this.lines.removeChild(line);
     }
 
     insertChar(value) {
@@ -154,7 +162,7 @@ export class Editor {
     }
 
     moveToCursor() {
-        this.content.scrollTo(this.cursor);
+        this.lines.scrollTo(this.cursor);
         this.inputReceiver.focus();
     }
 
@@ -182,7 +190,7 @@ export class Editor {
 
         if (!line || !line.classList.contains("line")) return;
 
-        this.cursorPosition.line = Array.from(this.content.childNodes).indexOf(line);
+        this.cursorPosition.line = Array.from(this.lines.childNodes).indexOf(line);
         this.focus(line);
 
         if (char) {
