@@ -86,17 +86,24 @@ export class Editor {
     }
 
     insertLine() {
+        const lineNumber = document.createElement("div");
+        lineNumber.className = "line-number";
+        lineNumber.tabIndex = -1;
+        this.lineNumbers.appendChild(lineNumber);
+
         const line = document.createElement("div");
         line.className = "line";
         line.tabIndex = -1;
-
         this.lines.appendChild(line);
+
         return line;
     }
 
     removeLine(line) {
         if (!line) return;
 
+        const lineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
+        this.lineNumbers.removeChild(lineNumber);
         this.lines.removeChild(line);
     }
 
@@ -161,14 +168,13 @@ export class Editor {
         line.classList.add("line-focused");
     }
 
-    moveToCursor() {
-        this.lines.scrollTo(this.cursor);
-        this.inputReceiver.focus();
-    }
-
     resetReceiver() {
         this.inputReceiver.value = "\u200B" + "\u200B";
         this.inputReceiver.setSelectionRange(1, 1);
+    }
+
+    moveToCursor() {
+        this.inputReceiver.focus();
     }
 
     debounceCursor() {

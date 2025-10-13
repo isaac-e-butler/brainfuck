@@ -14,75 +14,88 @@
         position: relative;
         overflow: hidden;
 
-        .editor-lines {
+        .editor-content {
             background-color: rgb(20 20 20);
-            padding: 1.75rem 0 1.5rem 0;
+            padding-top: 1.75rem;
             max-height: 25rem;
             overflow: auto;
+            display: flex;
 
-            .line {
-                counter-increment: line-number;
-                border-bottom: 0.1rem solid transparent;
-                border-top: 0.1rem solid transparent;
-                position: relative;
-                line-height: 1rem;
-                white-space: pre;
-                font-size: 1rem;
-                display: flex;
-                cursor: text;
-                height: 1rem;
-                width: 100%;
+            .editor-line-numbers {
+                position: sticky;
+                z-index: 1;
+                left: 0;
 
-                .editor-cursor {
-                    border-left: 0.1rem solid transparent;
-                    height: 100%;
-
-                    & > .cursor-input-receiver {
-                        font-family: "syne-mono";
-                        box-sizing: border-box;
-                        line-height: 1rem;
-                        font-size: 1rem;
-                        outline: none;
-                        resize: none;
-                        height: 1rem;
-                        width: 1px;
-                        padding: 0;
-                        opacity: 0;
-                        border: 0;
-                    }
+                .line-number {
+                    counter-increment: line-number
                 }
 
-                &.line-focused {
-                    outline: none;
-
-                    &::before {
-                        color: white;
-                    }
-
-                    .editor-cursor {
-                        border-color: white;
-                    }
-                }
-
-                &::before {
+                .line-number::before {
                     background-color: rgb(20 20 20);
+                    border-bottom: 0.1rem solid transparent;
+                    border-top: 0.1rem solid transparent;
                     content: counter(line-number);
                     padding-right: 1.25rem;
+                    line-height: 1rem;
                     text-align: right;
-                    position: sticky;
                     flex-shrink: 0;
                     display: grid;
                     color: grey;
                     width: 2.5rem;
-                    z-index: 1;
-                    left: 0;
+                    height: 1rem;
                 }
+            }
 
-                &::after {
-                    content: "";
-                    flex-shrink: 0;
-                    display: grid;
-                    width: 2.5rem;
+            .editor-lines {
+                width: 100%;
+
+                .line {
+                    border-bottom: 0.1rem solid transparent;
+                    border-top: 0.1rem solid transparent;
+                    position: relative;
+                    line-height: 1rem;
+                    white-space: pre;
+                    font-size: 1rem;
+                    display: flex;
+                    cursor: text;
+                    height: 1rem;
+                    width: 100%;
+
+                    .editor-cursor {
+                        border-left: 0.1rem solid transparent;
+                        height: 100%;
+
+                        & > .cursor-input-receiver {
+                            font-family: "syne-mono";
+                            box-sizing: border-box;
+                            line-height: 1rem;
+                            font-size: 1rem;
+                            outline: none;
+                            resize: none;
+                            height: 1rem;
+                            width: 1px;
+                            padding: 0;
+                            opacity: 0;
+                            border: 0;
+                        }
+                    }
+
+                    &.line-focused {
+                        .editor-cursor {
+                            border-color: white;
+                        }
+                    }
+
+                    &::after {
+                        content: "";
+                        flex-shrink: 0;
+                        display: grid;
+                        width: 2.5rem;
+                    }
+
+                    &:last-child {
+                        padding-bottom: 1.5rem;
+                    }
                 }
             }
         }
