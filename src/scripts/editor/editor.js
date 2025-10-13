@@ -194,9 +194,6 @@ export class Editor {
     }
 
     focusAtCursor() {
-        const cursorRect = this.cursor.getBoundingClientRect();
-
-        this.content.scrollTo({ top: cursorRect.top + 16, left: cursorRect.left + 16, behaviour: "smooth" });
         this.inputReceiver.focus();
     }
 
