@@ -68,21 +68,28 @@ export class Editor {
         this.cursorPositionStatus.innerText = this.cursorPosition.toString();
         this.status.appendChild(this.cursorPositionStatus);
 
-        const line = this.insertLine();
-        line.appendChild(this.cursor);
-        line.classList.add("line-focused");
+        const [lineNumber, line] = this.insertLine();
+        this.focusedLineNumber = lineNumber;
         this.focusedLine = line;
+        this.focus();
 
         this.container = document.getElementById("editor");
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
+        line.appendChild(this.cursor);
 
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
+        this.inputReceiver.addEventListener("blur", () => {
+            this.blur();
+        });
+        this.inputReceiver.addEventListener("focus", () => {
+            this.focus();
+        });
 
-        this.moveToCursor();
+        this.focusAtCursor();
     }
 
     insertLine() {
@@ -96,7 +103,7 @@ export class Editor {
         line.tabIndex = -1;
         this.lines.appendChild(line);
 
-        return line;
+        return [lineNumber, line];
     }
 
     removeLine(line) {
@@ -160,16 +167,25 @@ export class Editor {
             }
         }
 
-        this.moveToCursor();
+        this.focusAtCursor();
     }
 
     focus(line) {
-        if (!line) return;
+        if (line) {
+            this.focusedLineNumber.classList.remove("line-focused");
+            this.focusedLine.classList.remove("line-focused");
 
+            this.focusedLine = line;
+            this.focusedLineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
+        }
+
+        this.focusedLineNumber.classList.add("line-focused");
+        this.focusedLine.classList.add("line-focused");
+    }
+
+    blur() {
+        this.focusedLineNumber.classList.remove("line-focused");
         this.focusedLine.classList.remove("line-focused");
-        this.focusedLine = line;
-
-        line.classList.add("line-focused");
     }
 
     resetReceiver() {
@@ -177,7 +193,10 @@ export class Editor {
         this.inputReceiver.setSelectionRange(1, 1);
     }
 
-    moveToCursor() {
+    focusAtCursor() {
+        const cursorRect = this.cursor.getBoundingClientRect();
+
+        this.content.scrollTo({ top: cursorRect.top + 16, left: cursorRect.left + 16, behaviour: "smooth" });
         this.inputReceiver.focus();
     }
 
@@ -211,7 +230,7 @@ export class Editor {
             line.append(this.cursor);
         }
 
-        this.moveToCursor();
+        this.focusAtCursor();
     }
 
     moveCursor(direction = undefined) {
@@ -230,8 +249,8 @@ export class Editor {
                     line.previousSibling.insertBefore(this.cursor, lineAbove[this.cursorPosition.column]);
                 }
 
-                this.focus(line.previousSibling);
                 this.cursorPosition.line -= 1;
+                this.focus(line.previousSibling);
                 break;
             }
             case "down": {
@@ -246,8 +265,8 @@ export class Editor {
                     line.nextSibling.insertBefore(this.cursor, lineBelow[this.cursorPosition.column]);
                 }
 
-                this.focus(line.nextSibling);
                 this.cursorPosition.line += 1;
+                this.focus(line.nextSibling);
                 break;
             }
             case "left": {
@@ -257,10 +276,11 @@ export class Editor {
                     this.cursorPosition.column -= 1;
                 } else if (line.previousSibling !== null) {
                     line.previousSibling.append(this.cursor);
-                    this.focus(line.previousSibling);
 
-                    this.cursorPosition.column = line.previousSibling.childNodes.length - 1;
                     this.cursorPosition.line -= 1;
+                    this.cursorPosition.column = line.previousSibling.childNodes.length - 1;
+
+                    this.focus(line.previousSibling);
                 }
                 break;
             }
@@ -270,15 +290,16 @@ export class Editor {
                     this.cursorPosition.column += 1;
                 } else if (line.nextSibling !== null) {
                     line.nextSibling.prepend(this.cursor);
-                    this.focus(line.nextSibling);
 
                     this.cursorPosition.column = 0;
                     this.cursorPosition.line += 1;
+
+                    this.focus(line.nextSibling);
                 }
                 break;
             }
         }
 
-        this.moveToCursor();
+        this.focusAtCursor();
     }
 }

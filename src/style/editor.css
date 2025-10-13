@@ -24,6 +24,9 @@
         height: 100%;
 
         .editor-content {
+            transform: translateZ(0);
+            perspective: 2;
+
             background-color: rgb(20 20 20);
             padding-top: 1.75rem;
             max-height: 100%;
@@ -37,7 +40,11 @@
                 left: 0;
 
                 .line-number {
-                    counter-increment: line-number
+                    counter-increment: line-number;
+
+                    &.line-focused::before {
+                        color: white;
+                    }
                 }
 
                 .line-number::before {
