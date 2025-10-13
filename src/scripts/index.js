@@ -14,6 +14,8 @@ async function startProgram() {
 
     try {
         status.clearLogs();
+        output.innerText = "";
+
         const instructions = processInstructions(editor);
 
         if (!instructions) {
@@ -23,7 +25,6 @@ async function startProgram() {
             status.attachInfo("Starting program:", instructions);
         }
 
-        output.innerText = "";
         playButton.removeEventListener("click", startProgram);
         playButton.firstChild.src = icons.stop;
         playButton.addEventListener("click", abortProgram);
