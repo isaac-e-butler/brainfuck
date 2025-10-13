@@ -20,7 +20,7 @@ export function handleInputEvent(editor, event) {
         case inputTypes.text: {
             if (event.data === " ") {
                 editor.insertSpace();
-            } else if (event.data.trim().length !== 0) {
+            } else {
                 editor.insertChar(event.data);
             }
             break;
@@ -31,6 +31,10 @@ export function handleInputEvent(editor, event) {
         }
         case inputTypes.delete: {
             editor.remove("right");
+            break;
+        }
+        default: {
+            editor.insertChar(event.data);
             break;
         }
     }

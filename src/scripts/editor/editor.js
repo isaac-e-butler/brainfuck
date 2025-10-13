@@ -108,7 +108,11 @@ export class Editor {
     }
 
     insertChar(value) {
-        if (typeof value !== "string" || value.length !== 1) return;
+        if (typeof value !== "string") return;
+
+        value = value.trim();
+
+        if (!value || value.length > 1) return;
 
         const char = document.createElement("div");
         char.className = "char";
