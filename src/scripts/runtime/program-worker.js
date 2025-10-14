@@ -1,5 +1,5 @@
 import { syntax } from "./syntax.js";
-import System from "./System.js";
+import System from "./system.js";
 
 const system = new System();
 let instructions = undefined;
