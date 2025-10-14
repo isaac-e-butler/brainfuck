@@ -39,6 +39,7 @@ html, body {
     flex-direction: column;
     box-sizing: border-box;
     padding: 0.5rem 1rem;
+    min-width: 17.5rem;
     height: 100dvh;
     width: 100dvw;
     gap: 1.25rem;
