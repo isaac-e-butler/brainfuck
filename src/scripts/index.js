@@ -1,50 +1,55 @@
-import { processInstructions, runProgram } from "./runtime/index.js";
-import { editor, status, inputForm, playButton, output, icons } from "./global.js";
+import { icons, input, inputForm, output, playButton, status } from "./global.js";
+import { extractInstructions } from "./runtime/extractInstructions.js";
+import { waitForExitCode } from "./runtime/waitForExitCode.js";
+import { createWorker } from "./runtime/createWorker.js";
 
-inputForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-});
-
-async function startProgram() {
-    const abort = new AbortController();
-
-    function abortProgram() {
-        abort.abort();
-    }
+async function initialiseProcess() {
+    const abortController = new AbortController();
+    const triggerAbortEvent = () => abortController.abort();
 
     try {
         status.clearLogs();
         output.innerText = "";
-
-        const instructions = processInstructions(editor);
-
-        if (!instructions) {
-            status.attachWarning("Failed to load program - no instructions found");
-            return undefined;
-        } else {
-            status.attachInfo("Starting program:", instructions);
-        }
-
-        playButton.removeEventListener("click", startProgram);
         playButton.firstChild.src = icons.stop;
-        playButton.addEventListener("click", abortProgram);
+        playButton.addEventListener("click", triggerAbortEvent);
 
-        const success = await runProgram(instructions, abort);
-
-        if (success) {
-            status.attachInfo("Program exited successfully");
-        } else {
-            status.attachError("Program was aborted");
+        if (!window.Worker) {
+            status.attachError("Failed to load program - browser doesn't support web-workers");
+            return;
         }
+
+        const instructions = extractInstructions();
+        if (!instructions) {
+            status.attachError("Failed to load program - no instructions found");
+            return;
+        }
+
+        const worker = createWorker(abortController);
+        const handleAbortEvent = () => {
+            status.attachError("Program was aborted");
+            worker.terminate();
+        };
+        abortController.signal.addEventListener("abort", handleAbortEvent, { once: true });
+
+        status.attachInfo("Starting program:", instructions);
+        worker.postMessage({ type: "LOAD", payload: instructions });
+
+        await waitForExitCode(abortController);
     } catch (error) {
-        status.attachError("Unexpected error occurred:", error.toString());
+        status.attachError("Unexpected error occurred:", error);
+        status.attachInfo("Program exited with errors");
     } finally {
-        playButton.removeEventListener("click", abortProgram);
+        inputForm.classList.remove("focus");
+        inputForm.reset();
+        input.blur();
+
+        playButton.removeEventListener("click", triggerAbortEvent);
         playButton.firstChild.src = icons.play;
-        playButton.addEventListener("click", startProgram);
+        playButton.addEventListener("click", initialiseProcess, { once: true });
 
         status.attachInfo("Process terminated");
     }
 }
 
-playButton.addEventListener("click", startProgram);
+inputForm.addEventListener("submit", (event) => event.preventDefault());
+playButton.addEventListener("click", initialiseProcess, { once: true });

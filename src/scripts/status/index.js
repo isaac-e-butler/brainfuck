@@ -1,1 +1,1 @@
-export * from "./Status.js";
+export * from "./status.js";
