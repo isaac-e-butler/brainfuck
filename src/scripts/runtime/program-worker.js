@@ -52,7 +52,7 @@ onmessage = (event) => {
             system.incrementCounter();
         }
 
-        if (system.counter >= instructions.length) {
+        if (system.counter >= instructions.length && currentContext !== "paused") {
             postMessage({ type: "FINISHED" });
             close();
         }
