@@ -82,12 +82,8 @@ export class Editor {
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
-        this.inputReceiver.addEventListener("blur", () => {
-            this.blur();
-        });
-        this.inputReceiver.addEventListener("focus", () => {
-            this.focus();
-        });
+        this.inputReceiver.addEventListener("focus", () => this.focus());
+        this.inputReceiver.addEventListener("blur", () => this.blur());
 
         this.focusAtCursor();
     }

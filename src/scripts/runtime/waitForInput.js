@@ -1,7 +1,5 @@
 import { inputForm, input, status } from "../global.js";
 
-export const abortReadMessage = "ABORT_READ";
-
 function parseInput(target) {
     const value = Object.fromEntries(new FormData(target)).input.trim();
 
@@ -22,28 +20,22 @@ function parseInput(target) {
     return undefined;
 }
 
-async function readInput(abort) {
-    return await new Promise(async (resolve, reject) => {
-        function cleanUp() {
-            inputForm.removeEventListener("submit", handleInput);
-            abort.signal.removeEventListener("abort", cleanAbort);
-        }
+export async function waitForInput(abortController) {
+    return await new Promise(async (resolve) => {
+        input.focus();
 
-        function cleanAbort() {
-            cleanUp();
-            reject(abortReadMessage);
+        function processAborted() {
+            inputForm.removeEventListener("submit", handleInput);
+            resolve();
         }
 
         async function handleInput(event) {
-            function cleanResolveWith(value) {
-                cleanUp();
-                resolve(value);
-            }
-
             const parsedValue = parseInput(event.target);
 
             if (parsedValue) {
-                cleanResolveWith(parsedValue);
+                inputForm.removeEventListener("submit", handleInput);
+                abortController.signal.removeEventListener("abort", processAborted);
+                resolve(parsedValue);
             } else {
                 status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
                 inputForm.reset();
@@ -52,8 +44,6 @@ async function readInput(abort) {
         }
 
         inputForm.addEventListener("submit", handleInput);
-        abort.signal.addEventListener("abort", cleanAbort);
+        abortController.signal.addEventListener("abort", processAborted, { once: true });
     });
 }
-
-export default readInput;

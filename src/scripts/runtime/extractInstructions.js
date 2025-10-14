@@ -1,6 +1,7 @@
-import { syntax } from "./syntax.js";
+import { editor } from "../global.js";
+import { syntax } from "./index.js";
 
-function processInstructions(editor) {
+export function extractInstructions() {
     let instructions = "";
 
     for (const child of editor.content.children) {
@@ -15,5 +16,3 @@ function processInstructions(editor) {
 
     return instructions;
 }
-
-export default processInstructions;

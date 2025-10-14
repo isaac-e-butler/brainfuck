@@ -1,2 +1,6 @@
-export { default as runProgram } from "./runProgram.js";
-export { default as processInstructions } from "./processInstructions.js";
+export * from "./createWorker.js";
+export * from "./extractInstructions.js";
+export * from "./programExitController.js";
+export * from "./syntax.js";
+export * from "./waitForExitCode.js";
+export * from "./waitForInput.js";
