@@ -1,7 +1,5 @@
 import { icons, input, inputForm, output, playButton, status } from "./global.js";
-import { extractInstructions } from "./runtime/extractInstructions.js";
-import { waitForExitCode } from "./runtime/waitForExitCode.js";
-import { createWorker } from "./runtime/createWorker.js";
+import { extractInstructions, createWorker, waitForExitCode } from "./runtime/index.js";
 
 async function initialiseProcess() {
     const abortController = new AbortController();
@@ -37,7 +35,7 @@ async function initialiseProcess() {
         await waitForExitCode(abortController);
     } catch (error) {
         status.attachError("Unexpected error occurred:", error);
-        status.attachInfo("Program exited with errors");
+        status.attachWarning("Program exited with errors");
     } finally {
         inputForm.classList.remove("focus");
         inputForm.reset();

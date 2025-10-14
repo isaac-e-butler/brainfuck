@@ -1,5 +1,5 @@
 import { editor } from "../global.js";
-import { syntax } from "./syntax.js";
+import { syntax } from "./index.js";
 
 export function extractInstructions() {
     let instructions = "";

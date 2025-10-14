@@ -1,4 +1,4 @@
-import { waitForInput } from "./waitForInput.js";
+import { waitForInput } from "./index.js";
 import { output, program } from "../global.js";
 
 export function createWorker(abortController) {
