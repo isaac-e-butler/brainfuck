@@ -1,6 +1,6 @@
 import { Editor } from "./editor/index.js";
 import { Status } from "./status/index.js";
-import { ProgramExitController } from "./runtime/programExitController.js";
+import { ProgramExitController } from "./runtime/index.js";
 
 export const editor = new Editor();
 export const status = new Status();
