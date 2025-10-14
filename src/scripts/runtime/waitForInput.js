@@ -24,11 +24,17 @@ export async function waitForInput(abortController) {
     return await new Promise(async (resolve) => {
         input.focus();
 
+        function processAborted() {
+            inputForm.removeEventListener("submit", handleInput);
+            resolve();
+        }
+
         async function handleInput(event) {
             const parsedValue = parseInput(event.target);
 
             if (parsedValue) {
                 inputForm.removeEventListener("submit", handleInput);
+                abortController.signal.removeEventListener("abort", processAborted);
                 resolve(parsedValue);
             } else {
                 status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
@@ -37,7 +43,7 @@ export async function waitForInput(abortController) {
             }
         }
 
-        inputForm.addEventListener("submit", handleInput, { once: true });
-        abortController.signal.addEventListener("abort", () => resolve(), { once: true });
+        inputForm.addEventListener("submit", handleInput);
+        abortController.signal.addEventListener("abort", processAborted, { once: true });
     });
 }
