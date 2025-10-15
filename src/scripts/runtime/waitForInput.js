@@ -21,11 +21,14 @@ function parseInput(target) {
 }
 
 export async function waitForInput(abortController) {
-    return await new Promise(async (resolve) => {
-        input.focus();
+    const defaultPlaceholder = input.placeholder;
+    input.placeholder = "enter a value and press ↵";
+    input.focus();
 
+    return await new Promise(async (resolve) => {
         function processAborted() {
             inputForm.removeEventListener("submit", handleInput);
+            input.placeholder = defaultPlaceholder;
             resolve();
         }
 
@@ -33,8 +36,12 @@ export async function waitForInput(abortController) {
             const parsedValue = parseInput(event.target);
 
             if (parsedValue) {
-                inputForm.removeEventListener("submit", handleInput);
                 abortController.signal.removeEventListener("abort", processAborted);
+                inputForm.removeEventListener("submit", handleInput);
+                input.placeholder = defaultPlaceholder;
+                inputForm.reset();
+
+                status.attachInfo(`Program received value '${parsedValue}'`);
                 resolve(parsedValue);
             } else {
                 status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");

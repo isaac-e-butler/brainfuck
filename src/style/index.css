@@ -26,6 +26,7 @@ html, body {
     &.border-left-only {
         border-bottom-right-radius: 0;
         border-top-right-radius: 0;
+        border-right: none;
     }
 
     &.border-right-only {
