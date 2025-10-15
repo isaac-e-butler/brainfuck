@@ -85,10 +85,9 @@
                         & > .cursor-input-receiver {
                             font-family: "syne-mono";
                             box-sizing: border-box;
-                            transform: scale(0);
                             line-height: 1rem;
                             outline: none;
-                            font-size: 1px;
+                            font-size: 1rem;
                             resize: none;
                             height: 1rem;
                             width: 1px;
