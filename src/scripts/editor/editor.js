@@ -1,4 +1,3 @@
-import { icons } from "../global.js";
 import {
     handleInputEvent,
     handleKeyEvent,
@@ -6,6 +5,7 @@ import {
     handlePasteEvent,
     handlePasteClickEvent,
 } from "./events/index.js";
+import { icons } from "../icons.js";
 
 export class Editor {
     constructor() {

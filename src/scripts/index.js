@@ -1,5 +1,6 @@
-import { icons, input, inputForm, output, playButton, status } from "./global.js";
+import { input, inputForm, output, playButton, status } from "./global.js";
 import { extractInstructions, createWorker, waitForExitCode } from "./runtime/index.js";
+import { icons } from "./icons.js";
 
 async function initialiseProcess() {
     const abortController = new AbortController();
