@@ -216,6 +216,7 @@ export class Editor {
                 } else if (line.nextSibling !== null && this.cursor.nextSibling === null) {
                     const childrenBelow = Array.from(line.nextSibling.childNodes);
 
+                    this.focus(line);
                     line.append(...childrenBelow);
                     this.removeLine(line.nextSibling);
                 }
@@ -228,15 +229,18 @@ export class Editor {
 
     focus(line) {
         if (line) {
-            this.focusedLineNumber.classList.remove("line-focused");
             this.focusedLine.classList.remove("line-focused");
-
             this.focusedLine = line;
-            this.focusedLineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
         }
-
-        this.focusedLineNumber.classList.add("line-focused");
         this.focusedLine.classList.add("line-focused");
+
+        setTimeout(() => {
+            if (line) {
+                this.focusedLineNumber.classList.remove("line-focused");
+                this.focusedLineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
+            }
+            this.focusedLineNumber.classList.add("line-focused");
+        }, 0);
     }
 
     blur() {
