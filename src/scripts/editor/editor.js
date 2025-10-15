@@ -1,9 +1,10 @@
+import { icons } from "../global.js";
 import {
     handleInputEvent,
     handleKeyEvent,
     handleMouseEvent,
     handlePasteEvent,
-    handleTouchEvent,
+    handlePasteClickEvent,
 } from "./events/index.js";
 
 export class Editor {
@@ -84,8 +85,17 @@ export class Editor {
         this.container.appendChild(this.status);
         line.appendChild(this.cursor);
 
+        this.pasteButton = document.getElementById("paste");
+        if (window.isSecureContext) {
+            this.pasteButton.addEventListener("click", (event) => handlePasteClickEvent(this, event));
+            this.pasteButton.removeAttribute("disabled");
+            this.pasteButton.firstChild.src = icons.paste;
+        } else {
+            this.pasteButton.setAttribute("disabled", "true");
+            this.pasteButton.firstChild.src = icons.pasteDisabled;
+        }
+
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
-        this.lines.addEventListener("touchend", (event) => handleTouchEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
