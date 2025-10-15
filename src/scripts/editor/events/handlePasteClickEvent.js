@@ -1,16 +1,14 @@
-export function handlePasteClickEvent(editor, event) {
+export async function handlePasteClickEvent(editor, event) {
     event.stopPropagation();
     event.preventDefault();
 
     editor.debounceCursor();
     editor.resetReceiver();
 
-    navigator.clipboard
-        .readText()
-        .then((text) => {
-            editor.insertText(text);
-        })
-        .catch((error) => {
-            console.error("Error occurred while pasting via touch:", error);
-        });
+    try {
+        const text = await navigator.clipboard.readText();
+        editor.insertText(text);
+    } catch (error) {
+        console.error("Error occurred while pasting:", error);
+    }
 }
