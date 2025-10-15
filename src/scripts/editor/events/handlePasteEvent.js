@@ -5,32 +5,6 @@ export function handlePasteEvent(editor, event) {
     editor.debounceCursor();
     editor.resetReceiver();
 
-    const data = event.clipboardData.getData("text");
-
-    for (const char of data) {
-        const charCode = char.charCodeAt(0);
-
-        switch (charCode) {
-            case 13: {
-                break;
-            }
-            case 10: {
-                editor.insertLine();
-                editor.moveCursor("down");
-                break;
-            }
-            case 9: {
-                editor.insertSpace(4);
-                break;
-            }
-            case 32: {
-                editor.insertSpace();
-                break;
-            }
-            default: {
-                editor.insertChar(char);
-                break;
-            }
-        }
-    }
+    const text = event.clipboardData.getData("text");
+    editor.insertText(text);
 }

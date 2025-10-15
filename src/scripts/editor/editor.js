@@ -1,4 +1,10 @@
-import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
+import {
+    handleInputEvent,
+    handleKeyEvent,
+    handleMouseEvent,
+    handlePasteEvent,
+    handleTouchEvent,
+} from "./events/index.js";
 
 export class Editor {
     constructor() {
@@ -79,6 +85,7 @@ export class Editor {
         line.appendChild(this.cursor);
 
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
+        this.lines.addEventListener("touchstart", async (event) => handleTouchEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
@@ -86,6 +93,35 @@ export class Editor {
         this.inputReceiver.addEventListener("blur", () => this.blur());
 
         this.focusAtCursor();
+    }
+
+    insertText(text) {
+        for (const char of text) {
+            const charCode = char.charCodeAt(0);
+
+            switch (charCode) {
+                case 13: {
+                    break;
+                }
+                case 10: {
+                    this.insertLine();
+                    this.moveCursor("down");
+                    break;
+                }
+                case 9: {
+                    this.insertSpace(4);
+                    break;
+                }
+                case 32: {
+                    this.insertSpace();
+                    break;
+                }
+                default: {
+                    this.insertChar(char);
+                    break;
+                }
+            }
+        }
     }
 
     insertLine() {
