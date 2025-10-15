@@ -71,6 +71,7 @@
         transform: translateX(-45%);
         position: absolute;
         margin-top: 3.5rem;
+        row-gap: 0.2rem;
 
         button::before {
             content: "";
@@ -87,7 +88,10 @@
 
         & > :last-child {
             padding-bottom: 0.1rem;
-            padding-top: 0.075rem;
+        }
+
+        & > :first-child {
+            padding-top: 0.1rem;
         }
     }
     

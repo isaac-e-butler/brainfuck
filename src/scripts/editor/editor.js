@@ -4,6 +4,7 @@ import {
     handleMouseEvent,
     handlePasteEvent,
     handlePasteClickEvent,
+    handleCopyClickEvent,
 } from "./events/index.js";
 import { icons } from "../icons.js";
 
@@ -92,6 +93,16 @@ export class Editor {
         } else {
             this.pasteButton.setAttribute("disabled", "true");
             this.pasteButton.firstChild.src = icons.pasteDisabled;
+        }
+
+        this.copyButton = document.getElementById("copy");
+        if (window.isSecureContext) {
+            this.copyButton.addEventListener("click", (event) => handleCopyClickEvent(this, event));
+            this.copyButton.removeAttribute("disabled");
+            this.copyButton.firstChild.src = icons.copy;
+        } else {
+            this.copyButton.setAttribute("disabled", "true");
+            this.copyButton.firstChild.src = icons.copyDisabled;
         }
 
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
