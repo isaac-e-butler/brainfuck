@@ -1,24 +1,26 @@
-import { icons, input, inputForm, output, playButton, status } from "./global.js";
+import { input, inputForm, output, playButton, status } from "./global.js";
 import { extractInstructions, createWorker, waitForExitCode } from "./runtime/index.js";
+import { icons } from "./icons.js";
 
 async function initialiseProcess() {
     const abortController = new AbortController();
     const triggerAbortEvent = () => abortController.abort();
 
     try {
+        inputForm.reset();
         status.clearLogs();
         output.innerText = "";
         playButton.firstChild.src = icons.stop;
         playButton.addEventListener("click", triggerAbortEvent);
 
         if (!window.Worker) {
-            status.attachError("Failed to load program - browser doesn't support web-workers");
+            status.attachError("Program failed to load - browser doesn't support web-workers");
             return;
         }
 
         const instructions = extractInstructions();
         if (!instructions) {
-            status.attachError("Failed to load program - no instructions found");
+            status.attachError("Program failed to load - no instructions found");
             return;
         }
 
@@ -29,7 +31,7 @@ async function initialiseProcess() {
         };
         abortController.signal.addEventListener("abort", handleAbortEvent, { once: true });
 
-        status.attachInfo("Starting program:", instructions);
+        status.attachInfo("Program starting:", instructions);
         worker.postMessage({ type: "LOAD", payload: instructions });
 
         await waitForExitCode(abortController);

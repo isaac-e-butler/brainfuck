@@ -1,4 +1,3 @@
-import { icons } from "../global.js";
 import {
     handleInputEvent,
     handleKeyEvent,
@@ -6,6 +5,7 @@ import {
     handlePasteEvent,
     handlePasteClickEvent,
 } from "./events/index.js";
+import { icons } from "../icons.js";
 
 export class Editor {
     constructor() {
@@ -83,7 +83,6 @@ export class Editor {
         this.container = document.getElementById("editor");
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
-        line.appendChild(this.cursor);
 
         this.pasteButton = document.getElementById("paste");
         if (window.isSecureContext) {
@@ -143,7 +142,17 @@ export class Editor {
         const line = document.createElement("div");
         line.className = "line";
         line.tabIndex = -1;
-        this.lines.appendChild(line);
+
+        if (this.cursor.parentElement) {
+            const currentLine = this.cursor.parentElement;
+            currentLine.insertAdjacentElement("afterend", line);
+
+            const childrenAfterCursor = Array.from(currentLine.childNodes).splice(this.cursorPosition.column + 1);
+            line.append(...childrenAfterCursor);
+        } else {
+            line.appendChild(this.cursor);
+            this.lines.appendChild(line);
+        }
 
         return [lineNumber, line];
     }
@@ -192,8 +201,11 @@ export class Editor {
                 if (line.innerText.length > 0 && this.cursor.previousSibling !== null) {
                     this.cursor.previousSibling.remove();
                     this.cursorPosition.column -= 1;
-                } else if (line.previousSibling !== null && line.innerText.length === 0) {
+                } else if (line.previousSibling !== null && this.cursor.previousSibling === null) {
+                    const childrenAfterCursor = Array.from(line.childNodes).splice(this.cursorPosition.column + 1);
+
                     this.moveCursor("left");
+                    line.previousSibling.append(...childrenAfterCursor);
                     this.removeLine(line);
                 }
                 break;
@@ -201,9 +213,12 @@ export class Editor {
             case "right": {
                 if (line.innerText.length > 0 && this.cursor.nextSibling !== null) {
                     this.cursor.nextSibling.remove();
-                } else if (line.nextSibling !== null && line.innerText.length === 0) {
-                    this.moveCursor("down");
-                    this.removeLine(line);
+                } else if (line.nextSibling !== null && this.cursor.nextSibling === null) {
+                    const childrenBelow = Array.from(line.nextSibling.childNodes);
+
+                    this.focus(line);
+                    line.append(...childrenBelow);
+                    this.removeLine(line.nextSibling);
                 }
                 break;
             }
@@ -214,15 +229,18 @@ export class Editor {
 
     focus(line) {
         if (line) {
-            this.focusedLineNumber.classList.remove("line-focused");
             this.focusedLine.classList.remove("line-focused");
-
             this.focusedLine = line;
-            this.focusedLineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
         }
-
-        this.focusedLineNumber.classList.add("line-focused");
         this.focusedLine.classList.add("line-focused");
+
+        setTimeout(() => {
+            if (line) {
+                this.focusedLineNumber.classList.remove("line-focused");
+                this.focusedLineNumber = this.lineNumbers.childNodes[this.cursorPosition.line];
+            }
+            this.focusedLineNumber.classList.add("line-focused");
+        }, 0);
     }
 
     blur() {

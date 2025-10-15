@@ -14,7 +14,7 @@ export function handleInputEvent(editor, event) {
     switch (event.inputType) {
         case inputTypes.enter: {
             editor.insertLine();
-            editor.moveCursor("down");
+            editor.moveCursor("right");
             break;
         }
         case inputTypes.text: {

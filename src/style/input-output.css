@@ -79,47 +79,25 @@
         margin: 0;
         width: 75%;
     }
-
-    #input-submit, #input-submit::before {
-        font-size: 0.8rem;
-        cursor: pointer;
-        outline: none;
-        padding: 0.5rem;
-        border: none;
-        margin: 0;
-    }
     
     #input-submit {
         background-color: rgb(200, 200, 200);
+        transition: background-color 150ms ease-out;
         position: relative;
+        cursor: pointer;
+        outline: none;
+        border: none;
+        margin: 0;
         width: 25%;
 
-        &:hover::before {
-            background-color: rgb(230, 230, 230);
-            transform: translate(-50%, -70%);
-        }
-    
-        &:active::before {
-            transform: translate(-50%, -50%);
+        &.active {
+            background-color: rgb(160, 160, 160);
         }
 
-        &.pressed::before {
-            background-color: rgb(230, 230, 230);
-            transform: translate(-50%, -50%);
-        }
-
-        &::before {
-            border-radius: inherit;
-            box-sizing: border-box;
-            background-color: rgb(220 220 220);
-            transform: translate(-50%, -65%);
-            font-family: "syne-mono";
-            color: rgb(40 40 40);
-            content: attr(value);
-            position: absolute;
-            width: 100%;
-
-            transition: ease 200ms;
+        img {
+            user-select: none;
+            pointer-events: none;
+            filter: invert() opacity(0.7);
         }
     }
 }
