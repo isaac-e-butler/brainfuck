@@ -88,7 +88,7 @@
                             transform: scale(0);
                             line-height: 1rem;
                             outline: none;
-                            font-size: 0;
+                            font-size: 1px;
                             resize: none;
                             height: 1rem;
                             width: 1px;
