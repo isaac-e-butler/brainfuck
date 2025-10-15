@@ -17,8 +17,6 @@ export async function handleCopyClickEvent(editor, event) {
         return result + "\n";
     }, "");
 
-    console.log(text);
-
     try {
         await navigator.clipboard.writeText(text);
     } catch (error) {
