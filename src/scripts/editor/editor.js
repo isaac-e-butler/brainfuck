@@ -85,7 +85,7 @@ export class Editor {
         line.appendChild(this.cursor);
 
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
-        this.lines.addEventListener("touchstart", async (event) => handleTouchEvent(this, event));
+        this.lines.addEventListener("touchstart", (event) => handleTouchEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));
         this.inputReceiver.addEventListener("keydown", (event) => handleKeyEvent(this, event));
         this.inputReceiver.addEventListener("input", (event) => handleInputEvent(this, event));
