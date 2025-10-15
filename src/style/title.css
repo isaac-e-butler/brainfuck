@@ -26,10 +26,10 @@
             top: 50%;
         }
     }
-    
-    #options {
+
+    .options-left, .options-top {
         display: inline-flex;
-        margin-left: 4rem;
+        z-index: 1;
 
         button {
             background-color: transparent;
@@ -39,26 +39,21 @@
             border: none;
             padding: 0;
 
-            &::before {
-                content: "";
-                background-color: rgb(20 20 20);
-                transform: translateY(-50%);
-                position: absolute;
-                height: 0.4rem;
-                width: 100%;
-                z-index: 2;
-                top: 50%;
+            &:disabled {
+                cursor: not-allowed;
             }
-            
-            &:hover, &:focus {
-                img {
-                    opacity: 1;
+
+            &:not(:disabled) {
+                &:hover, &:focus {
+                    img {
+                        opacity: 1;
+                    }
                 }
-            }
-    
-            &:active {
-                img {
-                    opacity: 0.3;
+        
+                &:active {
+                    img {
+                        opacity: 0.3;
+                    }
                 }
             }
     
@@ -68,6 +63,50 @@
                 opacity: 0.6;
                 z-index: 3;
             }
+        }
+    }
+
+    .options-left {
+        flex-direction: column;
+        transform: translateX(-45%);
+        position: absolute;
+        margin-top: 3.5rem;
+
+        button::before {
+            content: "";
+            background-color: rgb(20 20 20);
+            transform: translate(-45%, -55%);
+            position: absolute;
+            padding: 0.2rem 0;
+            width: 0.4rem;
+            height: 100%;
+            z-index: 2;
+            left: 50%;
+            top: 50%;
+        }
+
+        & > :last-child {
+            padding-bottom: 0.1rem;
+            padding-top: 0.075rem;
+        }
+    }
+    
+    .options-top {
+        transform: translateY(30%);
+        position: absolute;
+        margin-left: 9.5rem;
+
+        button::before {
+            content: "";
+            background-color: rgb(20 20 20);
+            transform: translate(-50%, -70%);
+            position: absolute;
+            padding: 0 0.1rem;
+            height: 0.4rem;
+            width: 100%;
+            z-index: 2;
+            left: 50%;
+            top: 50%;
         }
 
         & > :last-child {

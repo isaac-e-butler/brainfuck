@@ -1,11 +1,9 @@
-export function handleTouchEvent(editor, event) {
+export function handlePasteClickEvent(editor, event) {
     event.stopPropagation();
     event.preventDefault();
 
     editor.debounceCursor();
     editor.resetReceiver();
-
-    if (event.touches.length !== 2) return;
 
     navigator.clipboard
         .readText()
