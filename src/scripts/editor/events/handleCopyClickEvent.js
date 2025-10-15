@@ -5,7 +5,13 @@ export async function handleCopyClickEvent(editor, event) {
     const lines = editor.content.getElementsByClassName("line");
     const text = Array.from(lines).reduce((result, line) => {
         for (const char of line.children) {
-            result += char.innerText;
+            if (char.classList.contains("char")) {
+                result += char.innerText;
+            } else if (char.classList.contains("space")) {
+                result += " ";
+            } else if (char.classList.contains("tab")) {
+                result += "\t";
+            }
         }
 
         return result + "\n";
