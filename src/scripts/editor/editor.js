@@ -291,8 +291,12 @@ export class Editor {
         this.focus(line);
 
         if (char) {
-            this.cursorPosition.column = Array.from(line.childNodes).indexOf(char);
-            line.insertBefore(this.cursor, line.childNodes[this.cursorPosition.column]);
+            const indexOfChar = Array.from(line.childNodes).indexOf(char);
+
+            const shouldOffsetCursor = this.cursorPosition.column <= indexOfChar;
+            this.cursorPosition.column = shouldOffsetCursor ? indexOfChar - 1 : indexOfChar;
+
+            line.insertBefore(this.cursor, line.childNodes[indexOfChar]);
         } else {
             this.cursorPosition.column = line.childNodes.length - 1;
             line.append(this.cursor);
