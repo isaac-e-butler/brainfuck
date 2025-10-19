@@ -144,6 +144,25 @@ export class Editor {
         }
     }
 
+    readText() {
+        const lines = this.content.getElementsByClassName("line");
+        const text = Array.from(lines).reduce((result, line) => {
+            for (const char of line.children) {
+                if (char.classList.contains("char")) {
+                    result += char.innerText;
+                } else if (char.classList.contains("space")) {
+                    result += " ";
+                } else if (char.classList.contains("tab")) {
+                    result += "\t";
+                }
+            }
+
+            return result + "\n";
+        }, "");
+
+        return text;
+    }
+
     insertLine() {
         const lineNumber = document.createElement("div");
         lineNumber.className = "line-number";

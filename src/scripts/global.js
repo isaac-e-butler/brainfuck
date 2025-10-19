@@ -3,6 +3,7 @@ import { Editor } from "./editor/index.js";
 import { Status } from "./status/index.js";
 
 export const playButton = document.getElementById("play");
+export const shareButton = document.getElementById("share");
 
 export const output = document.getElementById("output");
 
