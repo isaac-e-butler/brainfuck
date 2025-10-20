@@ -17,7 +17,7 @@ export async function waitForExitCode(controller) {
                 }
                 case 3: {
                     status.attachError("Program was aborted");
-                    resolve(error);
+                    resolve();
                     break;
                 }
                 case 1:
