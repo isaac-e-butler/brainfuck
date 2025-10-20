@@ -1,9 +1,8 @@
-import { program, status } from "../global.js";
+import { status } from "../global.js";
 
 export async function waitForExitCode(controller) {
     return await new Promise(async (resolve, reject) => {
         const handleExit = (event) => {
-            controller.signal.removeEventListener("abort", processAborted);
             const { exitCode, error } = event.detail;
 
             switch (exitCode) {
@@ -16,6 +15,11 @@ export async function waitForExitCode(controller) {
                     reject(error);
                     break;
                 }
+                case 3: {
+                    status.attachError("Program was aborted");
+                    resolve(error);
+                    break;
+                }
                 case 1:
                 default: {
                     reject("Error: Unknown");
@@ -24,12 +28,6 @@ export async function waitForExitCode(controller) {
             }
         };
 
-        const processAborted = () => {
-            program.removeExitListener(handleExit);
-            resolve();
-        };
-
-        controller.signal.addEventListener("abort", processAborted, { once: true });
-        program.addExitListener(handleExit);
+        controller.addExitCodeListener(handleExit);
     });
 }

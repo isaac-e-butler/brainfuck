@@ -1,11 +1,11 @@
 import { editor, input, inputForm, output, playButton, shareButton, status } from "./global.js";
-import { extractInstructions, createWorker, waitForExitCode } from "./runtime/index.js";
+import { extractInstructions, createWorker, waitForExitCode, ExitCodeController } from "./runtime/index.js";
 import { Compressor, Decompressor, Encoder } from "./compression/index.js";
 import { icons } from "./icons.js";
 
 async function initialiseProcess() {
-    const abortController = new AbortController();
-    const triggerAbortEvent = () => abortController.abort();
+    const exitCodeController = new ExitCodeController();
+    const triggerAbortEvent = () => exitCodeController.exit(3);
 
     try {
         inputForm.reset();
@@ -25,17 +25,13 @@ async function initialiseProcess() {
             return;
         }
 
-        const worker = createWorker(abortController);
-        const handleAbortEvent = () => {
-            status.attachError("Program was aborted");
-            worker.terminate();
-        };
-        abortController.signal.addEventListener("abort", handleAbortEvent, { once: true });
+        const worker = createWorker(exitCodeController);
+        exitCodeController.addExitCodeListener(() => worker.terminate());
 
         status.attachInfo("Program starting:", instructions);
         worker.postMessage({ type: "LOAD", payload: instructions });
 
-        await waitForExitCode(abortController);
+        await waitForExitCode(exitCodeController);
     } catch (error) {
         status.attachError("Unexpected error occurred:", error);
         status.attachWarning("Program exited with errors");

@@ -20,7 +20,7 @@ function parseInput(target) {
     return undefined;
 }
 
-export async function waitForInput(abortController) {
+export async function waitForInput(controller) {
     const defaultPlaceholder = input.placeholder;
     input.placeholder = "enter a value and press ↵";
     input.focus();
@@ -36,7 +36,7 @@ export async function waitForInput(abortController) {
             const parsedValue = parseInput(event.target);
 
             if (parsedValue) {
-                abortController.signal.removeEventListener("abort", processAborted);
+                controller.removeExitCodeListener(processAborted);
                 inputForm.removeEventListener("submit", handleInput);
                 input.placeholder = defaultPlaceholder;
                 inputForm.reset();
@@ -51,6 +51,6 @@ export async function waitForInput(abortController) {
         }
 
         inputForm.addEventListener("submit", handleInput);
-        abortController.signal.addEventListener("abort", processAborted, { once: true });
+        controller.addExitCodeListener(processAborted);
     });
 }

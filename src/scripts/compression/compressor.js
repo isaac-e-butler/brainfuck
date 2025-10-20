@@ -45,7 +45,7 @@ export class Compressor {
     }
 
     #compressToBlocks(value) {
-        const separators = [" ", "\n", "\t"];
+        const separators = new Set([" ", "\n", "\t"]);
 
         let prevChar = value[0];
         let current = { value: prevChar, count: 1 };
@@ -59,7 +59,7 @@ export class Compressor {
                 block += this.#createBlock(current);
                 current = { value: char, count: 1 };
 
-                if (separators.includes(prevChar) || separators.includes(char)) {
+                if (separators.has(prevChar) || separators.has(char)) {
                     blocks.push(block);
                     block = "";
                 }
