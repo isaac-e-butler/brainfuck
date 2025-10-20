@@ -57,6 +57,7 @@ playButton.addEventListener("click", initialiseProcess, { once: true });
 
 shareButton.addEventListener("click", () => {
     const text = editor.readText();
+    if (!text) return;
 
     const compressedText = new Compressor().compress(text);
     const encodedText = new Encoder().encode(compressedText);
@@ -64,13 +65,12 @@ shareButton.addEventListener("click", () => {
     const url = new URL(window.location.href);
     url.search = new URLSearchParams({ bf: encodedText });
 
-    window.history.pushState({ id: 1 }, "", url);
+    window.history.pushState("bf-file", "", url);
 });
 
 window.onload = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const encodedText = searchParams.get("bf");
-
     if (!encodedText) return;
 
     const decodedText = new Encoder().decode(encodedText);

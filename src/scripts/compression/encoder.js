@@ -4,7 +4,7 @@ export class Encoder {
 
     encode(value) {
         if (!value) {
-            throw new Error("Cannot encode data without value");
+            throw new Error("Failed to encode data: Nothing to encode");
         }
 
         let encodedValue = "";
@@ -22,7 +22,7 @@ export class Encoder {
 
     decode(value) {
         if (!value) {
-            throw new Error("Cannot decode data without value");
+            throw new Error("Failed to decode data: Nothing to decode");
         }
 
         let decodedValue = "";
