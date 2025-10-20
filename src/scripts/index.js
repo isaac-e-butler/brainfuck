@@ -1,4 +1,4 @@
-import { editor, input, inputForm, output, playButton, shareButton, status } from "./global.js";
+import { editor, input, output, playButton, shareButton, status } from "./global.js";
 import { extractInstructions, createWorker, waitForExitCode, ExitCodeController } from "./runtime/index.js";
 import { Compressor, Decompressor, Encoder } from "./compression/index.js";
 import { icons } from "./icons.js";
@@ -8,47 +8,44 @@ async function initialiseProcess() {
     const triggerAbortEvent = () => exitCodeController.exit(3);
 
     try {
-        inputForm.reset();
-        status.clearLogs();
-        output.innerText = "";
+        input.clear();
+        status.clear();
+        output.clear();
         playButton.firstChild.src = icons.stop;
         playButton.addEventListener("click", triggerAbortEvent);
 
         if (!window.Worker) {
-            status.attachError("Program failed to load - browser doesn't support web-workers");
+            status.addError("Program failed to load - browser doesn't support web-workers");
             return;
         }
 
         const instructions = extractInstructions();
         if (!instructions) {
-            status.attachError("Program failed to load - no instructions found");
+            status.addError("Program failed to load - no instructions found");
             return;
         }
 
         const worker = createWorker(exitCodeController);
         exitCodeController.addExitCodeListener(() => worker.terminate());
 
-        status.attachInfo("Program starting:", instructions);
+        status.addInfo("Program starting:", instructions);
         worker.postMessage({ type: "LOAD", payload: instructions });
 
         await waitForExitCode(exitCodeController);
     } catch (error) {
-        status.attachError("Unexpected error occurred:", error);
-        status.attachWarning("Program exited with errors");
+        status.addError("Unexpected error occurred:", error);
+        status.addWarning("Program exited with errors");
     } finally {
-        inputForm.classList.remove("focus");
-        inputForm.reset();
-        input.blur();
+        input.disable();
 
         playButton.removeEventListener("click", triggerAbortEvent);
         playButton.firstChild.src = icons.play;
         playButton.addEventListener("click", initialiseProcess, { once: true });
 
-        status.attachInfo("Process terminated");
+        status.addInfo("Process terminated");
     }
 }
 
-inputForm.addEventListener("submit", (event) => event.preventDefault());
 playButton.addEventListener("click", initialiseProcess, { once: true });
 
 shareButton.addEventListener("click", () => {

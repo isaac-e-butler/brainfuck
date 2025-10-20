@@ -7,7 +7,7 @@ export async function waitForExitCode(controller) {
 
             switch (exitCode) {
                 case 0: {
-                    status.attachInfo("Program exited successfully");
+                    status.addInfo("Program exited successfully");
                     resolve();
                     break;
                 }
@@ -16,7 +16,7 @@ export async function waitForExitCode(controller) {
                     break;
                 }
                 case 3: {
-                    status.attachError("Program was aborted");
+                    status.addError("Program was aborted");
                     resolve();
                     break;
                 }
