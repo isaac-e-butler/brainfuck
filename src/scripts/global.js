@@ -1,4 +1,3 @@
-import { ProgramExitController } from "./runtime/index.js";
 import { Editor } from "./editor/index.js";
 import { Status } from "./status/index.js";
 import { attachActivationEvent } from "./helpers/index.js";
@@ -17,4 +16,3 @@ attachActivationEvent(submit);
 
 export const editor = new Editor();
 export const status = new Status();
-export const program = new ProgramExitController();

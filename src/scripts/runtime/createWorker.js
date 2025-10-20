@@ -1,7 +1,7 @@
 import { waitForInput } from "./index.js";
-import { output, program } from "../global.js";
+import { output } from "../global.js";
 
-export function createWorker(abortController) {
+export function createWorker(controller) {
     const scriptURL = new URL("program-worker.js", import.meta.url);
     const worker = new Worker(scriptURL, { type: "module" });
 
@@ -18,7 +18,7 @@ export function createWorker(abortController) {
                 break;
             }
             case "INPUT": {
-                const value = await waitForInput(abortController);
+                const value = await waitForInput(controller);
 
                 if (value) {
                     worker.postMessage({ type: "INPUT", payload: value });
@@ -26,11 +26,11 @@ export function createWorker(abortController) {
                 break;
             }
             case "FINISHED": {
-                program.exit(0);
+                controller.exit(0);
                 break;
             }
             case "ERROR": {
-                program.exit(2, message.payload);
+                controller.exit(2, message.payload);
                 break;
             }
         }
@@ -39,9 +39,9 @@ export function createWorker(abortController) {
     worker.onerror = () => {
         worker.terminate();
 
-        if (abortController.signal.aborted) return;
+        if (controller.exited) return;
 
-        program.exit(1);
+        controller.exit(1);
     };
 
     return worker;
