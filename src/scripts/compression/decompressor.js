@@ -7,74 +7,68 @@ export class Decompressor {
         const chunks = value.split(CustomSymbols.endSegment);
 
         if (Array.isArray(chunks) && chunks.length !== 2) {
-            throw new Error("Segmentation fault");
+            throw new Error(`Failed to decompress: Expected '2' chunks but received '${chunks.length}'`);
         }
 
         const dictionary = this.#createBlockDictionary(chunks[0]);
-        return this.#transcribe(chunks[1], dictionary);
+        return this.transcribe(chunks[1], dictionary);
     }
 
-    #transcribe(value, dictionary) {
+    transcribe(value, dictionary, prevState) {
         const characters = Array.from(value);
+        characters.push(CustomSymbols.endSegment);
 
-        let prevChar = undefined;
-        let readingPointerSymbol = false;
-        let readingNumericSymbols = false;
-        let numericSymbols = "";
-        let escapeFlag = false;
-        let skipFlag = false;
-        let result = "";
+        const blocks = [];
+        const state = prevState ?? {
+            prevChar: undefined,
+            readingPointerSymbol: false,
+            readingNumericSymbols: false,
+            numericSymbols: "",
+            escapeFlag: false,
+        };
 
-        while (characters.length > 0) {
-            const char = characters.shift();
+        for (let i = 0; i < characters.length; i++) {
+            const char = characters[i];
 
-            if (!escapeFlag && char === CustomSymbols.escape) {
-                escapeFlag = true;
+            if (!state.escapeFlag && char === CustomSymbols.escape) {
+                state.escapeFlag = true;
                 continue;
             }
 
-            if (!escapeFlag && this.#symbol.isNumericSymbol(char)) {
-                readingNumericSymbols = true;
-                numericSymbols += char;
-                if (characters.length > 0) continue;
+            if (!state.escapeFlag && this.#symbol.isNumericSymbol(char)) {
+                state.readingNumericSymbols = true;
+                state.numericSymbols += char;
+                continue;
             }
 
-            if (readingNumericSymbols && (!this.#symbol.isNumericSymbol(char) || characters.length === 0)) {
-                const count = this.#symbol.fromNumericSymbols(numericSymbols);
+            if (state.readingNumericSymbols && !this.#symbol.isNumericSymbol(char)) {
+                const count = this.#symbol.fromNumericSymbols(state.numericSymbols);
 
                 if (!Number.isSafeInteger(count)) {
                     throw new Error("Couldn't read number safely");
                 }
 
-                if (readingPointerSymbol) {
-                    characters.unshift(...Array.from((dictionary.get(count) ?? "/SEGMENT_FAULT/") + char));
-                    skipFlag = true;
-                } else {
-                    result += Array.from({ length: count - 1 }, () => prevChar).join("");
-                    if (characters.length === 0) break;
-                }
+                const block = state.readingPointerSymbol
+                    ? this.transcribe(dictionary.get(count) ?? "/SEGMENT_FAULT/", dictionary, prevState)
+                    : Array.from({ length: count - 1 }, () => state.prevChar).join("");
+                blocks.push(block);
 
-                readingPointerSymbol = false;
-                readingNumericSymbols = false;
-                numericSymbols = "";
+                state.readingPointerSymbol = false;
+                state.readingNumericSymbols = false;
+                state.numericSymbols = "";
             }
 
-            if (!escapeFlag && char === CustomSymbols.pointer) {
-                readingPointerSymbol = true;
+            if (!state.escapeFlag && char === CustomSymbols.pointer) {
+                state.readingPointerSymbol = true;
                 continue;
             }
 
-            if (skipFlag) {
-                skipFlag = false;
-                continue;
-            }
-
-            escapeFlag = false;
-            prevChar = char;
-            result += char;
+            state.escapeFlag = false;
+            state.prevChar = char;
+            blocks.push(char);
         }
 
-        return result;
+        return blocks.join("");
     }
 
     #createBlockDictionary(value) {

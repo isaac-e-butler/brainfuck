@@ -44,13 +44,13 @@
             }
 
             &:not(:disabled) {
-                &:hover, &:focus {
+                &:hover {
                     img {
                         opacity: 1;
                     }
                 }
         
-                &:active {
+                &.active {
                     img {
                         opacity: 0.3;
                     }
@@ -58,6 +58,7 @@
             }
     
             img {
+                transition: opacity 150ms ease-out;
                 position: relative;
                 height: 1.5rem;
                 opacity: 0.6;
