@@ -1,4 +1,4 @@
-import { inputForm, input, status } from "../global.js";
+import { input, status } from "../global.js";
 
 function parseInput(target) {
     const value = Object.fromEntries(new FormData(target)).input.trim();
@@ -21,14 +21,9 @@ function parseInput(target) {
 }
 
 export async function waitForInput(controller) {
-    const defaultPlaceholder = input.placeholder;
-    input.placeholder = "enter a value and press ↵";
-    input.focus();
-
     return await new Promise(async (resolve) => {
         function processAborted() {
-            inputForm.removeEventListener("submit", handleInput);
-            input.placeholder = defaultPlaceholder;
+            input.disable(handleInput);
             resolve();
         }
 
@@ -37,20 +32,18 @@ export async function waitForInput(controller) {
 
             if (parsedValue) {
                 controller.removeExitCodeListener(processAborted);
-                inputForm.removeEventListener("submit", handleInput);
-                input.placeholder = defaultPlaceholder;
-                inputForm.reset();
+                input.disable(handleInput);
 
-                status.attachInfo(`Program received value '${parsedValue}'`);
+                status.addInfo(`Program received value '${parsedValue}'`);
                 resolve(parsedValue);
             } else {
-                status.attachWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
-                inputForm.reset();
+                status.addWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
+                input.clear();
                 input.focus();
             }
         }
 
-        inputForm.addEventListener("submit", handleInput);
+        input.enable(handleInput);
         controller.addExitCodeListener(processAborted);
     });
 }

@@ -10,11 +10,7 @@ export function createWorker(controller) {
 
         switch (message.type) {
             case "OUTPUT": {
-                if (message.payload === 32) {
-                    output.innerText += String.fromCharCode(160); // space code
-                } else {
-                    output.innerText += String.fromCharCode(message.payload);
-                }
+                output.add(message.payload);
                 break;
             }
             case "INPUT": {
