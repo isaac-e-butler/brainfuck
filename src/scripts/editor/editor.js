@@ -7,6 +7,7 @@ import {
     handleCopyClickEvent,
 } from "./events/index.js";
 import { icons } from "../icons.js";
+import { attachActivationEvent } from "../helpers/index.js";
 
 export class Editor {
     constructor() {
@@ -88,6 +89,7 @@ export class Editor {
         this.pasteButton = document.getElementById("paste");
         if (window.isSecureContext) {
             this.pasteButton.addEventListener("click", (event) => handlePasteClickEvent(this, event));
+            attachActivationEvent(this.pasteButton);
             this.pasteButton.removeAttribute("disabled");
             this.pasteButton.firstChild.src = icons.paste;
         } else {
@@ -98,6 +100,7 @@ export class Editor {
         this.copyButton = document.getElementById("copy");
         if (window.isSecureContext) {
             this.copyButton.addEventListener("click", (event) => handleCopyClickEvent(this, event));
+            attachActivationEvent(this.copyButton);
             this.copyButton.removeAttribute("disabled");
             this.copyButton.firstChild.src = icons.copy;
         } else {
@@ -137,11 +140,30 @@ export class Editor {
                     break;
                 }
                 default: {
-                    this.insertChar(char);
+                    if (charCode > 32) this.insertChar(char);
                     break;
                 }
             }
         }
+    }
+
+    readText() {
+        const lines = this.content.getElementsByClassName("line");
+        const text = Array.from(lines).reduce((result, line) => {
+            for (const char of line.children) {
+                if (char.classList.contains("char")) {
+                    result += char.innerText;
+                } else if (char.classList.contains("space")) {
+                    result += " ";
+                } else if (char.classList.contains("tab")) {
+                    result += "\t";
+                }
+            }
+
+            return result + "\n";
+        }, "");
+
+        return text;
     }
 
     insertLine() {
