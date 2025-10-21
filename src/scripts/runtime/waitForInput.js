@@ -1,7 +1,7 @@
 import { inputBox, status } from "../components/index.js";
 
 function parseInput(target) {
-    const value = Object.fromEntries(new FormData(target)).input.trim();
+    const value = Object.fromEntries(new FormData(target)).input;
 
     if (value.length > 1 && value.startsWith("\\")) {
         const numeric = parseInt(value.substring(1));
@@ -30,7 +30,7 @@ export async function waitForInput(controller) {
         async function handleInput(event) {
             const parsedValue = parseInput(event.target);
 
-            if (parsedValue) {
+            if (parsedValue !== undefined) {
                 controller.removeExitCodeListener(processAborted);
                 inputBox.disable(handleInput);
 

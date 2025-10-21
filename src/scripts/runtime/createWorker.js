@@ -16,7 +16,7 @@ export function createWorker(controller) {
             case "INPUT": {
                 const value = await waitForInput(controller);
 
-                if (value) {
+                if (value !== undefined) {
                     worker.postMessage({ type: "INPUT", payload: value });
                 }
                 break;
