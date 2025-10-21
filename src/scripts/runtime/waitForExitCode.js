@@ -1,4 +1,4 @@
-import { status } from "../global.js";
+import { status } from "../components/index.js";
 
 export async function waitForExitCode(controller) {
     return await new Promise(async (resolve, reject) => {

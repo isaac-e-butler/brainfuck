@@ -1,13 +1,4 @@
-import {
-    handleInputEvent,
-    handleKeyEvent,
-    handleMouseEvent,
-    handlePasteEvent,
-    handlePasteClickEvent,
-    handleCopyClickEvent,
-} from "./events/index.js";
-import { icons } from "../icons.js";
-import { attachActivationEvent } from "../helpers/index.js";
+import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
 
 export class Editor {
     constructor() {
@@ -85,28 +76,6 @@ export class Editor {
         this.container = document.getElementById("editor");
         this.container.appendChild(this.content);
         this.container.appendChild(this.status);
-
-        this.pasteButton = document.getElementById("paste");
-        if (window.isSecureContext) {
-            this.pasteButton.addEventListener("click", (event) => handlePasteClickEvent(this, event));
-            attachActivationEvent(this.pasteButton);
-            this.pasteButton.removeAttribute("disabled");
-            this.pasteButton.firstChild.src = icons.paste;
-        } else {
-            this.pasteButton.setAttribute("disabled", "true");
-            this.pasteButton.firstChild.src = icons.pasteDisabled;
-        }
-
-        this.copyButton = document.getElementById("copy");
-        if (window.isSecureContext) {
-            this.copyButton.addEventListener("click", (event) => handleCopyClickEvent(this, event));
-            attachActivationEvent(this.copyButton);
-            this.copyButton.removeAttribute("disabled");
-            this.copyButton.firstChild.src = icons.copy;
-        } else {
-            this.copyButton.setAttribute("disabled", "true");
-            this.copyButton.firstChild.src = icons.copyDisabled;
-        }
 
         this.lines.addEventListener("mousedown", (event) => handleMouseEvent(this, event));
         this.inputReceiver.addEventListener("paste", (event) => handlePasteEvent(this, event));

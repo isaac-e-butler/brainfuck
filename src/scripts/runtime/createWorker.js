@@ -1,5 +1,5 @@
+import { output } from "../components/index.js";
 import { waitForInput } from "./index.js";
-import { output } from "../global.js";
 
 export function createWorker(controller) {
     const scriptURL = new URL("program-worker.js", import.meta.url);
