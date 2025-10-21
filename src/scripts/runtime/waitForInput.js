@@ -4,17 +4,11 @@ function parseInput(target) {
     const value = Object.fromEntries(new FormData(target)).input;
 
     if (value.length > 1 && value.startsWith("\\")) {
-        const numeric = parseInt(value.substring(1));
-
-        return Number.isSafeInteger(numeric) ? numeric : undefined;
+        return parseInt(value.substring(1));
     }
 
-    if (value.length <= 1) {
+    if (value.length === 1) {
         return value.charCodeAt(0);
-    }
-
-    if (value.length === 2 && value.toLowerCase().startsWith("\\")) {
-        return value.charCodeAt(1);
     }
 
     return undefined;
@@ -30,7 +24,7 @@ export async function waitForInput(controller) {
         async function handleInput(event) {
             const parsedValue = parseInput(event.target);
 
-            if (parsedValue !== undefined) {
+            if (Number.isSafeInteger(parsedValue)) {
                 controller.removeExitCodeListener(processAborted);
                 inputBox.disable(handleInput);
 

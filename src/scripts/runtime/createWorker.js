@@ -16,7 +16,7 @@ export function createWorker(controller) {
             case "INPUT": {
                 const value = await waitForInput(controller);
 
-                if (value !== undefined) {
+                if (Number.isSafeInteger(value)) {
                     worker.postMessage({ type: "INPUT", payload: value });
                 }
                 break;
