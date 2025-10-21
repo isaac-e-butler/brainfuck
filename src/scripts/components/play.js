@@ -1,3 +1,4 @@
+import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
 import { createWorker, ExitCodeController, extractInstructions, waitForExitCode } from "../runtime/index.js";
 import { inputBox, output, status } from "./index.js";
 
@@ -57,5 +58,7 @@ async function play(state) {
 
 export function initialise(state) {
     button.addEventListener("click", () => play(state), { once: true });
+
     updateButtonIcon(icon.play);
+    attachActivationEvent(button);
 }

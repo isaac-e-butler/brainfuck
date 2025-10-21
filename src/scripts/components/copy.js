@@ -1,3 +1,5 @@
+import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
+
 const button = document.getElementById("copy");
 const icon = {
     copy: "./src/icons/actions/copy.svg",
