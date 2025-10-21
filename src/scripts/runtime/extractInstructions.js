@@ -1,16 +1,12 @@
-import { editor } from "../global.js";
 import { syntax } from "./index.js";
 
-export function extractInstructions() {
+export function extractInstructions(state) {
+    const instructionSyntax = new Set(Object.values(syntax));
+
     let instructions = "";
-
-    for (const child of editor.content.children) {
-        const line = child.innerText;
-
-        for (const char of line) {
-            if (Object.values(syntax).includes(char)) {
-                instructions += char;
-            }
+    for (const char of state.editor.readText()) {
+        if (instructionSyntax.has(char)) {
+            instructions += char;
         }
     }
 
