@@ -41,6 +41,12 @@
 
             &:disabled {
                 cursor: not-allowed;
+
+                &.loading {
+                    img {
+                        animation: loading infinite linear 800ms;
+                    }
+                }
             }
 
             &:not(:disabled) {
@@ -117,5 +123,14 @@
         & > :last-child {
             padding-right: 0.1rem;
         }
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }

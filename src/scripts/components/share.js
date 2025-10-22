@@ -20,17 +20,23 @@ function share(state) {
 function loadPreviousShare(state) {
     const searchParams = new URLSearchParams(window.location.search);
     const encodedText = searchParams.get("bf");
-    if (!encodedText) return;
+
+    if (!encodedText) {
+        state.editor.resetContent();
+        return;
+    }
 
     const decodedText = new Encoder().decode(encodedText);
     const decompressedText = new Decompressor().decompress(decodedText);
 
+    state.editor.resetContent();
     state.editor.insertText(decompressedText);
 }
 
 export function initialise(state) {
     button.firstChild.src = icon;
     button.addEventListener("click", () => share(state));
+    window.addEventListener("popstate", () => loadPreviousShare(state));
 
     loadPreviousShare(state);
     attachActivationEvent(button);

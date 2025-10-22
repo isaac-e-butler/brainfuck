@@ -1,4 +1,4 @@
-import { copyButton, inputBox, pasteButton, playButton, shareButton } from "./components/index.js";
+import { copyButton, deleteButton, inputBox, pasteButton, playButton, shareButton } from "./components/index.js";
 import { Editor } from "./editor/editor.js";
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -11,4 +11,5 @@ window.addEventListener("DOMContentLoaded", () => {
     shareButton.initialise(state);
     copyButton.initialise(state);
     pasteButton.initialise(state);
+    deleteButton.initialise(state);
 });

@@ -135,6 +135,20 @@ export class Editor {
         return text;
     }
 
+    resetContent() {
+        const firstLineNumber = this.lineNumbers.firstChild;
+        const firstLine = this.lines.firstChild;
+
+        this.moveCursorTo(firstLine.firstChild);
+        this.focus(firstLine);
+
+        this.lineNumbers.replaceChildren(firstLineNumber);
+        this.lines.replaceChildren(firstLine);
+        firstLine.replaceChildren(this.cursor);
+
+        this.focusAtCursor();
+    }
+
     insertLine() {
         const lineNumber = document.createElement("div");
         lineNumber.className = "line-number";
