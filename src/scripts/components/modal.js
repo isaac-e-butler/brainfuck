@@ -3,10 +3,7 @@ let afterEffect = undefined;
 let active = false;
 
 export function open(props) {
-    if (active) {
-        console.warn("Cannot open more than one modal instance");
-        return;
-    }
+    if (active) close();
 
     const { parent, action, titleText, confirmText, cancelText, destructive } = props;
     afterEffect = props.afterEffect;

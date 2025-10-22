@@ -17,9 +17,11 @@ function deleteForever(state) {
             state.editor.resetContent();
 
             const url = new URL(window.location.href);
-            url.search = new URLSearchParams();
-
-            window.history.pushState("bf-file", "", url);
+            const currentSearch = new URLSearchParams(window.location.search);
+            if (currentSearch.has("bf")) {
+                url.search = new URLSearchParams();
+                window.history.pushState("bf-file", "", url);
+            }
         },
         afterEffect: () => restore(),
         destructive: true,

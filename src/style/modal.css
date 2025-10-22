@@ -32,6 +32,7 @@
                 transition: background-color 150ms ease-out;
                 padding: 0.25rem 0.75rem;
                 font-family: "syne-mono";
+                color: rgb(20, 20, 20);
                 border-radius: 0.5rem;
                 font-weight: bold;
                 font-size: 0.8rem;
