@@ -5,3 +5,5 @@ export * as playButton from "./play.js";
 export * as shareButton from "./share.js";
 export * as copyButton from "./copy.js";
 export * as pasteButton from "./paste.js";
+export * as deleteButton from "./delete.js";
+export * as modal from "./modal.js";

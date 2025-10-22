@@ -1,6 +1,7 @@
 @import url("./title.css");
 @import url("./editor.css");
 @import url("./input-output.css");
+@import url("./modal.css");
 
 @font-face {
     font-family: "syne-mono";
