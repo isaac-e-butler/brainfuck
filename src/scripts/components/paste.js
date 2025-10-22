@@ -1,6 +1,6 @@
 import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
 
-const button = document.getElementById("copy");
+const button = document.getElementById("paste");
 const icon = {
     paste: "./src/icons/actions/paste.svg",
     pasteDisabled: "./src/icons/actions/paste-disabled.svg",
