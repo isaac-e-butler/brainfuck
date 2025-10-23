@@ -20,8 +20,8 @@ html, body {
 }
 
 .border, .border-left-only, .border-right-only  {
-    border: 0.2rem solid rgb(200, 200, 200);
-    border-radius: 0.5rem;
+    border: 0.125rem solid rgb(200, 200, 200);
+    border-radius: 0.75rem;
     box-sizing: border-box;
 
     &.border-left-only {
@@ -33,6 +33,7 @@ html, body {
     &.border-right-only {
         border-bottom-left-radius: 0;
         border-top-left-radius: 0;
+        border-left: none;
     }
 }
 

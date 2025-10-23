@@ -20,6 +20,9 @@ export function blur() {
 }
 
 export function enable(callback) {
+    input.removeAttribute("disabled");
+    submit.removeAttribute("disabled");
+
     if (callback) {
         form.addEventListener("submit", callback);
     }
@@ -33,6 +36,9 @@ export function clear() {
 }
 
 export function disable(callback) {
+    input.setAttribute("disabled", "true");
+    submit.setAttribute("disabled", "true");
+
     if (callback) {
         form.removeEventListener("submit", callback);
     }

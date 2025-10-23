@@ -17,13 +17,13 @@
             <div class="editor-container">
                 <div class="editor-header">
                     <div class="editor-title"><h1>Brainf*ck</h1></div>
-                    <div class="options-left">
-                        <button id="share"><img src="./src/icons/actions/share.svg" /></button>
+                    <div class="editor-menu-left" id="editor-options">
                         <button id="copy" disabled><img src="./src/icons/actions/copy-disabled.svg" /></button>
                         <button id="paste" disabled><img src="./src/icons/actions/paste-disabled.svg" /></button>
                         <button id="delete"><img src="./src/icons/actions/delete-forever.svg" /></button>
+                        <button id="share"><img src="./src/icons/actions/share.svg" /></button>
                     </div>
-                    <div class="options-top">
+                    <div class="editor-menu-top">
                         <button id="play"><img src="./src/icons/states/play.svg" /></button>
                     </div>
                 </div>
@@ -33,7 +33,6 @@
                 <div id="status" class="border console">status</div>
                 <div id="output" class="border console">output</div>
                 <form id="input-form">
-                    <!-- disable the input when not needed -->
                     <input
                         id="input"
                         name="input"
@@ -44,9 +43,10 @@
                         autocorrect="off"
                         autocapitalize="off"
                         spellcheck="false"
+                        disabled
                     />
-                    <button id="input-submit" class="border-right-only" type="submit">
-                        <img src="./src/icons/actions/keyboard_return.svg" />
+                    <button id="input-submit" class="border-right-only" type="submit" disabled>
+                        <img src="./src/icons/actions/keyboard-return.svg" />
                     </button>
                 </form>
             </div>
