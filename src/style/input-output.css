@@ -64,8 +64,12 @@
     flex-grow: 0;
 
     &.focus {
-        #input {
+        #input, #input-submit {
             border-color: rgb(230, 230, 230);
+        }
+
+        #input-submit {
+            background-color: rgb(230, 230, 230);
         }
     }
 
@@ -78,20 +82,30 @@
         outline: none;
         margin: 0;
         width: 75%;
+
+        &:disabled {
+            cursor: not-allowed;
+        }
     }
     
     #input-submit {
         background-color: rgb(200, 200, 200);
-        transition: background-color 150ms ease-out;
+        transition: background-color 150ms ease-out,  border-color 150ms ease-out;;
         position: relative;
         cursor: pointer;
         outline: none;
-        border: none;
         margin: 0;
         width: 25%;
 
-        &.active {
-            background-color: rgb(160, 160, 160);
+        &:disabled {
+            cursor: not-allowed;
+        }
+
+        &:not(:disabled) {
+            &.active {
+                background-color: rgb(160, 160, 160);
+                border-color: rgb(160, 160, 160);
+            }
         }
 
         img {

@@ -120,12 +120,12 @@ export class Editor {
         const lines = this.content.getElementsByClassName("line");
         const text = Array.from(lines).reduce((result, line) => {
             for (const char of line.children) {
-                if (char.classList.contains("char")) {
-                    result += char.innerText;
-                } else if (char.classList.contains("space")) {
+                if (char.classList.contains("space")) {
                     result += " ";
                 } else if (char.classList.contains("tab")) {
                     result += "\t";
+                } else if (char.classList.contains("char")) {
+                    result += char.innerText;
                 }
             }
 
@@ -200,7 +200,7 @@ export class Editor {
         if (typeof length !== "number" || length <= 0) return;
 
         const space = document.createElement("div");
-        space.className = length === 1 ? "space" : "tab";
+        space.className = length === 1 ? "space char" : "tab char";
         space.innerText = Array.from({ length: length }, () => {
             return String.fromCharCode(160);
         }).join("");
