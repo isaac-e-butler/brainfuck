@@ -1,4 +1,4 @@
-import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
+import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
 
 const button = document.getElementById("paste");
 const icon = {
@@ -26,6 +26,8 @@ async function paste(state, event) {
 }
 
 export function initialise(state) {
+    button.className = "option-button";
+
     if (window.isSecureContext) {
         button.addEventListener("click", (event) => paste(state, event));
         button.removeAttribute("disabled");

@@ -30,47 +30,6 @@
     .editor-menu-left, .editor-menu-top {
         display: inline-flex;
         z-index: 1;
-
-        button {
-            background-color: transparent;
-            position: relative;
-            cursor: pointer;
-            outline: none;
-            border: none;
-            padding: 0;
-
-            &:disabled {
-                cursor: not-allowed;
-
-                &.loading {
-                    img {
-                        animation: loading infinite linear 800ms;
-                    }
-                }
-            }
-
-            &:not(:disabled) {
-                &:hover {
-                    img {
-                        opacity: 1;
-                    }
-                }
-        
-                &.active {
-                    img {
-                        opacity: 0.3;
-                    }
-                }
-            }
-    
-            img {
-                transition: opacity 150ms ease-out;
-                position: relative;
-                height: 1.5rem;
-                opacity: 0.6;
-                z-index: 3;
-            }
-        }
     }
 
     .editor-menu-left {
@@ -80,7 +39,7 @@
         margin-top: 3.5rem;
         row-gap: 0.2rem;
 
-        button::before {
+        .option-button::before {
             content: "";
             background-color: rgb(20 20 20);
             transform: translate(-45%, -55%);
@@ -107,7 +66,7 @@
         position: absolute;
         margin-left: 9.5rem;
 
-        button::before {
+        .option-button::before {
             content: "";
             background-color: rgb(20 20 20);
             transform: translate(-50%, -70%);
@@ -123,14 +82,5 @@
         & > :last-child {
             padding-right: 0.1rem;
         }
-    }
-}
-
-@keyframes loading {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
     }
 }

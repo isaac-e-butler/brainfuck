@@ -1,7 +1,9 @@
 @import url("./title.css");
 @import url("./editor.css");
 @import url("./input-output.css");
+@import url("./option-button.css");
 @import url("./modal.css");
+@import url("./dropdown.css");
 
 @font-face {
     font-family: "syne-mono";

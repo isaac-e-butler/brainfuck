@@ -57,6 +57,7 @@ async function play(state) {
 }
 
 export function initialise(state) {
+    button.className = "option-button";
     button.addEventListener("click", () => play(state), { once: true });
 
     updateButtonIcon(icon.play);

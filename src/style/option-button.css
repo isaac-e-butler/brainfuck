@@ -1,0 +1,52 @@
+.option-button {
+    background-color: transparent;
+    position: relative;
+    cursor: pointer;
+    display: block;
+    outline: none;
+    border: none;
+    padding: 0;
+
+    &:disabled {
+        cursor: not-allowed;
+
+        &.loading {
+            img {
+                animation: loading infinite linear 800ms;
+            }
+        }
+    }
+
+    &:not(:disabled) {
+        &:hover {
+            img {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        &.active {
+            img {
+                opacity: 0.3;
+            }
+        }
+    }
+
+    img {
+        transition: opacity 150ms ease-out, transform 250ms ease-out;
+        display: block;
+        position: relative;
+        height: 1.5rem;
+        opacity: 0.6;
+        z-index: 3;
+    }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
