@@ -1,0 +1,33 @@
+.dropdown {
+    display: none;
+    background-color: rgb(20 20 20);
+    transform: translateY(-50%);
+    position: absolute;
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    z-index: 3;
+
+    &::before {
+        content: "";
+        border-left: inherit;
+        border-bottom: inherit;
+        background-color: inherit;
+        transform: translate(-62.5%, -50%) rotate(45deg);
+        position: absolute;
+        display: block;
+        height: 0.75rem;
+        width: 0.75rem;
+        top: 50%;
+        left: 0;
+    }
+
+    &.dropdown-open {
+        display: block;
+    }
+
+    &> .dropdown-content {
+        display: flex;
+        gap: 0.2rem;
+    }
+}

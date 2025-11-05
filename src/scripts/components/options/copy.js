@@ -1,4 +1,4 @@
-import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
+import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
 
 const button = document.getElementById("copy");
 const icon = {
@@ -23,6 +23,8 @@ async function copy(state, event) {
 }
 
 export function initialise(state) {
+    button.className = "option-button";
+
     if (window.isSecureContext) {
         button.addEventListener("click", (event) => copy(state, event));
         button.removeAttribute("disabled");
