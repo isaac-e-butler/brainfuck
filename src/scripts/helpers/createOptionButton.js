@@ -8,7 +8,7 @@ export function createOptionButton({ id, disabled, src, children }) {
     button.id = id;
 
     if (disabled) button.setAttribute("disabled", "true");
-    if (children) button.append(...children);
+    if (Array.isArray(children) && children.length > 0) button.append(...children);
 
     return button;
 }
