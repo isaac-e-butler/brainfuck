@@ -38,22 +38,24 @@ export function create({ container, parent, initialOptions }) {
         disable: function () {
             parent.setAttribute("disabled", "true");
         },
-        resize: function () {
-            alignToParentPosition(parent, dropdown);
-
-            if (!options.firstChild) {
-                this.disable();
-                this.close();
-            }
-        },
-        click: function () {
-            if (this.active) this.close();
-            else this.open();
-        },
     };
 
-    window.addEventListener("resize", () => state.resize());
-    parent.addEventListener("click", () => state.click());
+    window.addEventListener("resize", () => {
+        alignToParentPosition(parent, dropdown);
+
+        if (!options.firstChild) {
+            state.disable();
+            state.close();
+        }
+    });
+    parent.addEventListener("click", () => {
+        if (state.active) state.close();
+        else state.open();
+    });
+    document.addEventListener("click", (event) => {
+        const parentClick = event.target === parent || parent.contains(event.target);
+        if (!parentClick) state.close();
+    });
 
     return {
         add: function (option) {
