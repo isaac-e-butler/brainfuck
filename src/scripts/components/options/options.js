@@ -28,8 +28,10 @@ function adjustToScreenSize(state) {
 
     const shouldExpand = optionsBoundary.bottom + offset * 2 < editorBoundary.bottom;
 
-    if (shouldExpand) {
+    if (shouldExpand && collapsibleDropdown.count() > 0) {
         collapsibleDropdown.removeFirst();
+
+        adjustToScreenSize(state);
     }
 }
 
