@@ -71,5 +71,8 @@ export function create({ container, parent, initialOptions }) {
                 state.disable();
             }
         },
+        count: function () {
+            return options.children.length;
+        },
     };
 }
