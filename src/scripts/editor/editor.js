@@ -29,7 +29,7 @@ export class Editor {
                 line: 0,
                 column: 0,
                 toString() {
-                    return `Ln ${this.line + 1}, Col ${this.column + 1}`;
+                    return `Ln ${this.line + 1} Col ${this.column + 1}`;
                 },
             },
             {
