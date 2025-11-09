@@ -52,5 +52,6 @@ html, body {
 
     @media (min-width: 55rem) {
         flex-direction: row;
+        min-height: 11.5rem;
     }
 }
