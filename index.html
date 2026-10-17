@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <meta charset="utf-8" />
@@ -18,13 +18,19 @@
                 <div class="editor-header">
                     <div class="editor-title"><h1>Brainf*ck</h1></div>
                     <div class="editor-menu-left" id="editor-options">
-                        <button id="copy" disabled><img src="./src/icons/actions/copy-disabled.svg" /></button>
-                        <button id="paste" disabled><img src="./src/icons/actions/paste-disabled.svg" /></button>
-                        <button id="delete"><img src="./src/icons/actions/delete-forever.svg" /></button>
-                        <button id="share"><img src="./src/icons/actions/share.svg" /></button>
+                        <button class="option-button" id="copy" disabled>
+                            <img src="./src/icons/actions/copy-disabled.svg" />
+                        </button>
+                        <button class="option-button" id="paste" disabled>
+                            <img src="./src/icons/actions/paste-disabled.svg" />
+                        </button>
+                        <button class="option-button" id="delete">
+                            <img src="./src/icons/actions/delete-forever.svg" />
+                        </button>
+                        <button class="option-button" id="share"><img src="./src/icons/actions/share.svg" /></button>
                     </div>
                     <div class="editor-menu-top">
-                        <button id="play"><img src="./src/icons/states/play.svg" /></button>
+                        <button class="option-button" id="play"><img src="./src/icons/states/play.svg" /></button>
                     </div>
                 </div>
                 <div id="editor" class="border"></div>
