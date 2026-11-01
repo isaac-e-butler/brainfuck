@@ -1,5 +1,4 @@
-import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
-import { setButtonLoading } from "../../helpers/setButtonLoading.js";
+import { attachActivationEvent, setButtonLoading, setElementIcon } from "../../helpers/index.js";
 import { modal } from "../index.js";
 
 const button = document.getElementById("delete");
@@ -30,7 +29,7 @@ function deleteForever(state) {
 
 export function initialise(state) {
     button.className = "option-button";
-    button.firstChild.src = icon;
+    setElementIcon(button, icon);
     button.addEventListener("click", () => deleteForever(state));
 
     attachActivationEvent(button);

@@ -1,5 +1,5 @@
 import { Compressor, Decompressor, Encoder } from "../../compression/index.js";
-import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
+import { attachActivationEvent, setElementIcon } from "../../helpers/index.js";
 
 const button = document.getElementById("share");
 const icon = "./src/icons/actions/share.svg";
@@ -35,7 +35,7 @@ function loadPreviousShare(state) {
 
 export function initialise(state) {
     button.className = "option-button";
-    button.firstChild.src = icon;
+    setElementIcon(button, icon);
     button.addEventListener("click", () => share(state));
     window.addEventListener("popstate", () => loadPreviousShare(state));
 
