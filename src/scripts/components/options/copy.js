@@ -1,14 +1,10 @@
-import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
+import { attachActivationEvent, setElementIcon } from "../../helpers/index.js";
 
 const button = document.getElementById("copy");
 const icon = {
     copy: "./src/icons/actions/copy.svg",
     copyDisabled: "./src/icons/actions/copy-disabled.svg",
 };
-
-function updateButtonIcon(icon) {
-    button.firstChild.src = icon;
-}
 
 async function copy(state, event) {
     event.stopPropagation();
@@ -29,10 +25,10 @@ export function initialise(state) {
         button.addEventListener("click", (event) => copy(state, event));
         button.removeAttribute("disabled");
 
-        updateButtonIcon(icon.copy);
+        setElementIcon(button, icon.copy);
         attachActivationEvent(button);
     } else {
         button.setAttribute("disabled", "true");
-        updateButtonIcon(icon.copyDisabled);
+        setElementIcon(button, icon.copyDisabled);
     }
 }

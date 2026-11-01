@@ -1,4 +1,4 @@
-import { attachActivationEvent } from "../helpers/attachActivationEvent.js";
+import { attachActivationEvent, setElementIcon } from "../helpers/index.js";
 import { createWorker, ExitCodeController, extractInstructions, waitForExitCode } from "../runtime/index.js";
 import { inputBox, output, status } from "./index.js";
 
@@ -7,10 +7,6 @@ const icon = {
     stop: "./src/icons/states/stop.svg",
     play: "./src/icons/states/play.svg",
 };
-
-function updateButtonIcon(icon) {
-    button.firstChild.src = icon;
-}
 
 async function play(state) {
     const exitCodeController = new ExitCodeController();
@@ -21,7 +17,7 @@ async function play(state) {
         status.clear();
         output.clear();
 
-        updateButtonIcon(icon.stop);
+        setElementIcon(button, icon.stop);
         button.addEventListener("click", abort);
 
         if (!window.Worker) {
@@ -50,7 +46,7 @@ async function play(state) {
 
         button.removeEventListener("click", abort);
         button.addEventListener("click", () => play(state), { once: true });
-        updateButtonIcon(icon.play);
+        setElementIcon(button, icon.play);
 
         status.addInfo("Process terminated");
     }
@@ -60,6 +56,6 @@ export function initialise(state) {
     button.className = "option-button";
     button.addEventListener("click", () => play(state), { once: true });
 
-    updateButtonIcon(icon.play);
+    setElementIcon(button, icon.play);
     attachActivationEvent(button);
 }

@@ -1,14 +1,10 @@
-import { attachActivationEvent } from "../../helpers/attachActivationEvent.js";
+import { attachActivationEvent, setElementIcon } from "../../helpers/index.js";
 
 const button = document.getElementById("paste");
 const icon = {
     paste: "./src/icons/actions/paste.svg",
     pasteDisabled: "./src/icons/actions/paste-disabled.svg",
 };
-
-function updateButtonIcon(icon) {
-    button.firstChild.src = icon;
-}
 
 async function paste(state, event) {
     event.stopPropagation();
@@ -32,10 +28,10 @@ export function initialise(state) {
         button.addEventListener("click", (event) => paste(state, event));
         button.removeAttribute("disabled");
 
-        updateButtonIcon(icon.paste);
+        setElementIcon(button, icon.paste);
         attachActivationEvent(button);
     } else {
         button.setAttribute("disabled", "true");
-        updateButtonIcon(icon.pasteDisabled);
+        setElementIcon(button, icon.pasteDisabled);
     }
 }
