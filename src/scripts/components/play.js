@@ -46,7 +46,7 @@ async function play(state, button) {
 
         await waitForExitCode(exitCodeController);
     } catch (error) {
-        status.addError("Unexpected error occurred:", error);
+        status.addError("Unexpected error occurred:", error?.toString());
         status.addWarning("Program exited with errors");
     } finally {
         inputBox.disable();

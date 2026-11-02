@@ -81,7 +81,7 @@ class Program {
                 openBrackets.push(i);
             } else if (program[i] === syntax.endLoop) {
                 if (openBrackets.length === 0) {
-                    throw new Error(`Unmatched '${syntax.endLoop}' at position ${i + 1}`);
+                    throw new Error(`Unexpected '${syntax.endLoop}' at position ${i + 1}`);
                 }
 
                 const start = openBrackets.pop();
@@ -90,7 +90,9 @@ class Program {
         }
 
         if (openBrackets.length > 0) {
-            throw new Error(`Unmatched '${syntax.startLoop}' at position ${openBrackets.pop() + 1}`);
+            throw new Error(
+                `Missing '${syntax.endLoop}' for '${syntax.startLoop}' at position ${openBrackets.at(-1) + 1}`,
+            );
         }
 
         return jumps;
