@@ -5,9 +5,18 @@ function scrollToEnd() {
 }
 
 function createLog(message, level) {
+    const classList = [level];
+    let innerText = message;
+
+    if (typeof message === "object") {
+        classList.push(message.style);
+        innerText = message.text;
+    }
+
     const log = document.createElement("span");
-    log.classList.add(level);
-    log.innerText = message;
+    log.classList.add(...classList);
+    log.innerText = innerText;
+
     return log;
 }
 
