@@ -23,7 +23,7 @@ function adjustOptionsToScreenSize(state, button, dropdown) {
         const optionToMove = editorOptions.children[indexToMove];
         dropdown.add(optionToMove);
 
-        adjustOptionsToScreenSize(state);
+        adjustOptionsToScreenSize(state, button, dropdown);
     }
 
     const shouldExpand = optionsBoundary.bottom + offset * 2 < editorBoundary.bottom;
@@ -31,7 +31,7 @@ function adjustOptionsToScreenSize(state, button, dropdown) {
     if (shouldExpand && dropdown.count() > 0) {
         dropdown.removeFirst();
 
-        adjustOptionsToScreenSize(state);
+        adjustOptionsToScreenSize(state, button, dropdown);
     }
 }
 
@@ -56,7 +56,7 @@ export function initialise(state) {
 
     const dynamicDropdown = dropdown.create({
         container: editorOptions.parentElement,
-        parent: optionsButton.getElement(),
+        button: optionsButton,
     });
 
     adjustOptionsToScreenSize(state, optionsButton, dynamicDropdown);

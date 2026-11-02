@@ -1,78 +1,74 @@
+import { createElement } from "../helpers/element.js";
+
 function alignToParentPosition(parent, dropdown) {
-    const parentBoundary = parent.getBoundingClientRect();
-    dropdown.style.top = `${parentBoundary.top + Math.ceil(parentBoundary.height + 2.5) / 2}px`;
-    dropdown.style.left = `calc(${parentBoundary.left}px + 1rem)`;
+    const parentBoundary = parent.getElement().getBoundingClientRect();
+
+    dropdown.withElement((element) => {
+        element.style.top = `${parentBoundary.top + Math.ceil(parentBoundary.height + 2.5) / 2}px`;
+        element.style.left = `calc(${parentBoundary.left}px + 1rem)`;
+    });
 }
 
-export function create({ container, parent, initialOptions }) {
-    const options = document.createElement("div");
-    options.className = `dropdown-content`;
+export function create({ container, button }) {
+    const optionsContent = createElement("div", { class: "dropdown-content", primitive: true });
 
-    if (Array.isArray(initialOptions) && initialOptions.length > 0) {
-        options.append(...initialOptions);
-    } else {
-        parent.setAttribute("disabled", "true");
-    }
-
-    const dropdown = document.createElement("div");
-    dropdown.className = "border dropdown";
-    dropdown.appendChild(options);
-    container.appendChild(dropdown);
+    const dropdown = createElement("div", {
+        class: "border dropdown",
+        children: [optionsContent],
+    });
+    dropdown.setParent(container);
+    button.setDisabled(true);
 
     const state = {
         active: false,
         open: function () {
-            if (options.children.length <= 0) return;
+            if (optionsContent.children.length <= 0) return;
 
-            dropdown.classList.add("dropdown-open");
-            alignToParentPosition(parent, dropdown);
+            dropdown.addClass("dropdown-open");
+            alignToParentPosition(button, dropdown);
             this.active = true;
         },
         close: function () {
-            dropdown.classList.remove("dropdown-open");
+            dropdown.removeClass("dropdown-open");
             this.active = false;
-        },
-        enable: function () {
-            parent.removeAttribute("disabled");
-        },
-        disable: function () {
-            parent.setAttribute("disabled", "true");
         },
     };
 
     window.addEventListener("resize", () => {
-        alignToParentPosition(parent, dropdown);
+        alignToParentPosition(button, dropdown);
 
-        if (!options.firstChild) {
-            state.disable();
+        if (!optionsContent.firstChild) {
+            button.setDisabled(true);
             state.close();
         }
     });
-    parent.addEventListener("click", () => {
-        if (state.active) state.close();
-        else state.open();
-    });
-    document.addEventListener("click", (event) => {
-        const parentClick = event.target === parent || parent.contains(event.target);
-        if (!parentClick) state.close();
+    button.withElement((element) => {
+        element.addEventListener("click", () => {
+            if (state.active) state.close();
+            else state.open();
+        });
+        document.addEventListener("click", (event) => {
+            const parentClick = event.target === element || element.contains(event.target);
+            if (!parentClick) state.close();
+        });
     });
 
     return {
         add: function (option) {
-            options.prepend(option);
-            state.enable();
+            optionsContent.prepend(option);
+            button.setDisabled(false);
         },
         removeFirst: function () {
-            if (options.firstChild) {
-                parent.insertAdjacentElement("beforebegin", options.firstChild);
+            if (optionsContent.firstChild) {
+                button.getElement().insertAdjacentElement("beforebegin", optionsContent.firstChild);
             }
 
-            if (!options.firstChild) {
-                state.disable();
+            if (!optionsContent.firstChild) {
+                button.setDisabled(true);
             }
         },
         count: function () {
-            return options.children.length;
+            return optionsContent.children.length;
         },
     };
 }
