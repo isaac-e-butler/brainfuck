@@ -41,7 +41,7 @@ async function play(state, button) {
         const worker = createWorker(exitCodeController);
         exitCodeController.addExitCodeListener(() => worker.terminate());
 
-        status.addInfo("Program starting:", instructions);
+        status.addInfo("Program starting:", { text: instructions, style: "word-break" });
         worker.postMessage({ type: MessageType.Load, payload: instructions });
 
         await waitForExitCode(exitCodeController);
