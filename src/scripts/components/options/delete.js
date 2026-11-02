@@ -1,10 +1,9 @@
-import { attachActivationEvent, setButtonLoading, setElementIcon } from "../../helpers/index.js";
+import { attachClickAnimation, createElement, setButtonLoading } from "../../helpers/index.js";
 import { modal } from "../index.js";
 
-const button = document.getElementById("delete");
 const icon = "./src/icons/actions/delete-forever.svg";
 
-function deleteForever(state) {
+function deleteForever(button, state) {
     const restore = setButtonLoading(button);
 
     modal.open({
@@ -27,10 +26,18 @@ function deleteForever(state) {
     });
 }
 
-export function initialise(state) {
-    button.className = "option-button";
-    setElementIcon(button, icon);
-    button.addEventListener("click", () => deleteForever(state));
+export function initialise(parent, state) {
+    const img = createElement("img", { src: icon, primitive: true });
+    const button = createElement("button", {
+        id: "delete",
+        class: "option-button",
+        children: [img],
+    });
 
-    attachActivationEvent(button);
+    button.withElement((element) => {
+        element.addEventListener("click", () => deleteForever(button, state));
+        attachClickAnimation(element);
+    });
+
+    button.setParent(parent);
 }

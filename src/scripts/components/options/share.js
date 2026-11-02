@@ -1,7 +1,6 @@
 import { Compressor, Decompressor, Encoder } from "../../compression/index.js";
-import { attachActivationEvent, setElementIcon } from "../../helpers/index.js";
+import { attachClickAnimation, createElement } from "../../helpers/index.js";
 
-const button = document.getElementById("share");
 const icon = "./src/icons/actions/share.svg";
 
 function share(state) {
@@ -33,12 +32,21 @@ function loadPreviousShare(state) {
     state.editor.insertText(decompressedText);
 }
 
-export function initialise(state) {
-    button.className = "option-button";
-    setElementIcon(button, icon);
-    button.addEventListener("click", () => share(state));
-    window.addEventListener("popstate", () => loadPreviousShare(state));
+export function initialise(parent, state) {
+    const img = createElement("img", { src: icon, primitive: true });
+    const button = createElement("button", {
+        id: "share",
+        class: "option-button",
+        children: [img],
+    });
 
-    loadPreviousShare(state);
-    attachActivationEvent(button);
+    button.withElement((element) => {
+        element.addEventListener("click", () => share(state));
+        window.addEventListener("popstate", () => loadPreviousShare(state));
+
+        loadPreviousShare(state);
+        attachClickAnimation(element);
+    });
+
+    button.setParent(parent);
 }

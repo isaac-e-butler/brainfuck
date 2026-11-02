@@ -1,7 +1,6 @@
-export function attachActivationEvent(element) {
+export function attachClickAnimation(element) {
     if (!element) {
-        console.error("Failed to attach activation events");
-        return;
+        throw new Error("No element to attach events to");
     }
 
     let timeout = undefined;

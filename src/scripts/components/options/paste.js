@@ -1,6 +1,5 @@
-import { attachActivationEvent, setElementIcon } from "../../helpers/index.js";
+import { attachClickAnimation, createElement } from "../../helpers/index.js";
 
-const button = document.getElementById("paste");
 const icon = {
     paste: "./src/icons/actions/paste.svg",
     pasteDisabled: "./src/icons/actions/paste-disabled.svg",
@@ -21,17 +20,26 @@ async function paste(state, event) {
     }
 }
 
-export function initialise(state) {
-    button.className = "option-button";
+export function initialise(parent, state) {
+    const img = createElement("img", { src: icon.pasteDisabled, primitive: true });
+    const button = createElement("button", {
+        id: "paste",
+        class: "option-button",
+        children: [img],
+    });
 
     if (window.isSecureContext) {
-        button.addEventListener("click", (event) => paste(state, event));
-        button.removeAttribute("disabled");
+        button.withElement((element) => {
+            element.addEventListener("click", (event) => paste(state, event));
+            attachClickAnimation(element);
+        });
 
-        setElementIcon(button, icon.paste);
-        attachActivationEvent(button);
+        button.setDisabled(false);
+        button.setImg(icon.paste);
     } else {
-        button.setAttribute("disabled", "true");
-        setElementIcon(button, icon.pasteDisabled);
+        button.setDisabled(true);
+        button.setImg(icon.pasteDisabled);
     }
+
+    button.setParent(parent);
 }
