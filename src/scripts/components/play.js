@@ -1,14 +1,14 @@
-import { attachActivationEvent, setElementIcon } from "../helpers/index.js";
+import { attachClickAnimation, createElement } from "../helpers/index.js";
 import { createWorker, ExitCodeController, extractInstructions, waitForExitCode } from "../runtime/index.js";
 import { inputBox, output, status } from "./index.js";
 
-const button = document.getElementById("play");
+const runtimeOptions = document.getElementById("runtime-options");
 const icon = {
     stop: "./src/icons/states/stop.svg",
     play: "./src/icons/states/play.svg",
 };
 
-async function play(state) {
+async function play(state, button) {
     const exitCodeController = new ExitCodeController();
     const abort = () => exitCodeController.exit(3);
 
@@ -17,8 +17,8 @@ async function play(state) {
         status.clear();
         output.clear();
 
-        setElementIcon(button, icon.stop);
-        button.addEventListener("click", abort);
+        button.setImg(icon.stop);
+        button.withElement((element) => element.addEventListener("click", abort));
 
         if (!window.Worker) {
             status.addError("Program failed to load - browser doesn't support web-workers");
@@ -44,18 +44,28 @@ async function play(state) {
     } finally {
         inputBox.disable();
 
-        button.removeEventListener("click", abort);
-        button.addEventListener("click", () => play(state), { once: true });
-        setElementIcon(button, icon.play);
+        button.withElement((element) => {
+            element.removeEventListener("click", abort);
+            element.addEventListener("click", () => play(state, button), { once: true });
+        });
+        button.setImg(icon.play);
 
         status.addInfo("Process terminated");
     }
 }
 
 export function initialise(state) {
-    button.className = "option-button";
-    button.addEventListener("click", () => play(state), { once: true });
+    const img = createElement("img", { src: icon.play, primitive: true });
+    const button = createElement("button", {
+        id: "play",
+        class: "option-button",
+        children: [img],
+    });
 
-    setElementIcon(button, icon.play);
-    attachActivationEvent(button);
+    button.withElement((element) => {
+        element.addEventListener("click", () => play(state, button), { once: true });
+        attachClickAnimation(element);
+    });
+
+    button.setParent(runtimeOptions);
 }

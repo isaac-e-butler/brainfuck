@@ -1,18 +1,16 @@
-import { getIconElement, setElementIcon } from "./elementIcon.js";
-
 const loadingIcon = "./src/icons/states/loading.svg";
 
 export function setButtonLoading(button) {
-    const defaultIcon = getIconElement(button).src;
+    const defaultIcon = button.getImg().src;
 
-    button.setAttribute("disabled", "true");
-    button.classList.add("loading");
-    setElementIcon(button, loadingIcon);
+    button.setDisabled(true);
+    button.addClass("loading");
+    button.setImg(loadingIcon);
 
     function restore() {
-        button.removeAttribute("disabled");
-        button.classList.remove("loading");
-        setElementIcon(button, defaultIcon);
+        button.setDisabled(false);
+        button.removeClass("loading");
+        button.setImg(defaultIcon);
     }
 
     return restore;

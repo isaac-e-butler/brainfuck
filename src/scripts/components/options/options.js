@@ -1,49 +1,64 @@
-import { attachActivationEvent, createOptionButton } from "../../helpers/index.js";
+import { attachClickAnimation, createElement } from "../../helpers/index.js";
 import { shareButton, copyButton, pasteButton, deleteButton } from "./index.js";
 import { dropdown } from "../index.js";
 
-const options = document.getElementById("editor-options");
-
+const editorOptions = document.getElementById("editor-options");
 const icon = "./src/icons/actions/more-options.svg";
-const button = createOptionButton({ id: "more", src: icon });
-const collapsibleDropdown = dropdown.create({ container: options.parentElement, parent: button });
 
-function adjustToScreenSize(state) {
+function adjustOptionsToScreenSize(state, button, dropdown) {
     const editorBoundary = state.editor.container.getBoundingClientRect();
-    const optionsBoundary = options.getBoundingClientRect();
-    const offset = optionsBoundary.height / options.children.length;
+    const optionsBoundary = editorOptions.getBoundingClientRect();
+    const offset = optionsBoundary.height / editorOptions.children.length;
 
     const shouldCollapse = optionsBoundary.bottom + offset * 0.75 > editorBoundary.bottom;
 
     if (shouldCollapse) {
-        const indexToMove = options.lastChild === button ? options.children.length - 2 : options.children.length - 1;
+        const indexToMove =
+            editorOptions.lastChild === button.getElement()
+                ? editorOptions.children.length - 2
+                : editorOptions.children.length - 1;
 
         if (indexToMove < 0) return;
 
-        const optionToMove = options.children[indexToMove];
-        collapsibleDropdown.add(optionToMove);
+        const optionToMove = editorOptions.children[indexToMove];
+        dropdown.add(optionToMove);
 
-        adjustToScreenSize(state);
+        adjustOptionsToScreenSize(state);
     }
 
     const shouldExpand = optionsBoundary.bottom + offset * 2 < editorBoundary.bottom;
 
-    if (shouldExpand && collapsibleDropdown.count() > 0) {
-        collapsibleDropdown.removeFirst();
+    if (shouldExpand && dropdown.count() > 0) {
+        dropdown.removeFirst();
 
-        adjustToScreenSize(state);
+        adjustOptionsToScreenSize(state);
     }
 }
 
 export function initialise(state) {
-    options.appendChild(button);
-    attachActivationEvent(button);
+    const img = createElement("img", { src: icon, primitive: true });
+    const optionsButton = createElement("button", {
+        id: "more",
+        class: "option-button",
+        children: [img],
+    });
 
-    shareButton.initialise(state);
-    copyButton.initialise(state);
-    pasteButton.initialise(state);
-    deleteButton.initialise(state);
+    optionsButton.withElement((element) => {
+        attachClickAnimation(element);
+    });
 
-    adjustToScreenSize(state);
-    window.addEventListener("resize", () => adjustToScreenSize(state));
+    const parent = editorOptions;
+    copyButton.initialise(parent, state);
+    pasteButton.initialise(parent, state);
+    deleteButton.initialise(parent, state);
+    shareButton.initialise(parent, state);
+    optionsButton.setParent(editorOptions);
+
+    const dynamicDropdown = dropdown.create({
+        container: editorOptions.parentElement,
+        parent: optionsButton.getElement(),
+    });
+
+    adjustOptionsToScreenSize(state, optionsButton, dynamicDropdown);
+    window.addEventListener("resize", () => adjustOptionsToScreenSize(state, optionsButton, dynamicDropdown));
 }

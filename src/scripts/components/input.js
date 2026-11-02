@@ -1,4 +1,4 @@
-import { attachActivationEvent } from "../helpers/index.js";
+import { attachClickAnimation } from "../helpers/index.js";
 
 const form = document.getElementById("input-form");
 const input = document.getElementById("input");
@@ -49,5 +49,5 @@ export function disable(callback) {
 
 export function initialise() {
     form.addEventListener("submit", (event) => event.preventDefault());
-    attachActivationEvent(submit);
+    attachClickAnimation(submit);
 }

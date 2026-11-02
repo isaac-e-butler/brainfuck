@@ -1,4 +1,3 @@
-export * from "./attachActivationEvent.js";
+export * from "./attachClickAnimation.js";
 export * from "./setButtonLoading.js";
-export * from "./createOptionButton.js";
-export * from "./elementIcon.js";
+export * from "./element.js";
