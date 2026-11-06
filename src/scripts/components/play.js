@@ -1,11 +1,5 @@
 import { attachClickAnimation, createElement } from "../helpers/index.js";
-import {
-    createWorker,
-    ExitCodeController,
-    extractInstructions,
-    waitForExitCode,
-    MessageType,
-} from "../runtime/index.js";
+import { createWorker, ExitCodeController, getInstructions, waitForExitCode, MessageType } from "../runtime/index.js";
 import { inputBox, output, status } from "./index.js";
 
 const runtimeOptions = document.getElementById("runtime-options");
@@ -32,7 +26,7 @@ async function play(state, button) {
         }
 
         const text = state.editor.readText();
-        const instructions = extractInstructions(text);
+        const instructions = getInstructions(text, state.editor.activeLanguage);
         if (!instructions) {
             status.addError("Program failed to load - no instructions found");
             return;

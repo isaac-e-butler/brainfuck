@@ -21,10 +21,10 @@ class Program {
             this.#pointer--;
         },
         [syntax.incrementValue]: () => {
-            this.#memory[this.#pointer]++;
+            this.#memory[this.#pointer] = (this.getValue() + 1) & 255;
         },
         [syntax.decrementValue]: () => {
-            this.#memory[this.#pointer]--;
+            this.#memory[this.#pointer] = (this.getValue() - 1) & 255;
         },
         [syntax.startLoop]: () => {
             if (this.getValue() === 0) {

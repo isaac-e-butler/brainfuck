@@ -9,17 +9,23 @@ function share(state) {
 
     const compressedText = new Compressor().compress(text);
     const encodedText = new Encoder().encode(compressedText);
+    const language = state.editor.activeLanguage?.toLowerCase() ?? "bf";
 
     const url = new URL(window.location.href);
-    url.search = new URLSearchParams({ bf: encodedText });
+    url.search = new URLSearchParams({ t: encodedText, l: language });
 
-    window.history.pushState("bf-file", "", url);
+    window.history.pushState("shared-program", "", url);
 }
 
 function loadPreviousShare(state) {
     const searchParams = new URLSearchParams(window.location.search);
-    const encodedText = searchParams.get("bf");
 
+    const language = searchParams.get("l");
+    if (language) {
+        state.editor.setActiveLanguage(language);
+    }
+
+    const encodedText = searchParams.get("t");
     if (!encodedText) {
         state.editor.resetContent();
         return;

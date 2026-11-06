@@ -1,4 +1,4 @@
-const container = document.getElementById("output");
+const container = document.getElementById("output-content");
 let content = [];
 
 export function clear() {

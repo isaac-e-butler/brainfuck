@@ -1,4 +1,4 @@
-const container = document.getElementById("status");
+const container = document.getElementById("status-content");
 
 function scrollToEnd() {
     container.scrollTo(0, container.scrollHeight);

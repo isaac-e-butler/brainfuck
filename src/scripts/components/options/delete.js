@@ -15,11 +15,8 @@ function deleteForever(button, state) {
             state.editor.resetContent();
 
             const url = new URL(window.location.href);
-            const currentSearch = new URLSearchParams(window.location.search);
-            if (currentSearch.has("bf")) {
-                url.search = new URLSearchParams();
-                window.history.pushState("bf-file", "", url);
-            }
+            url.search = new URLSearchParams();
+            window.history.pushState("shared-program", "", url);
         },
         afterEffect: () => restore(),
         destructive: true,
