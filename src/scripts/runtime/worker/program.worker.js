@@ -7,7 +7,16 @@ const state = {
 };
 
 const program = new Program();
+const input = { value: [], done: true };
 let currentState = undefined;
+
+function readStoredInput() {
+    const prev = input.value.length;
+    if (!input.done) {
+        program.setValue(input.value.shift() ?? 0);
+        if (prev <= 0) input.done = true;
+    }
+}
 
 onmessage = (event) => {
     try {
@@ -19,7 +28,9 @@ onmessage = (event) => {
         }
 
         if (message.type === MessageType.Input) {
-            program.setValue(message.payload);
+            input.value = message.payload;
+            input.done = false;
+            readStoredInput();
             currentState = state.running;
         }
 
@@ -29,8 +40,12 @@ onmessage = (event) => {
                     postMessage({ type: MessageType.Output, payload: value });
                 },
                 input: function () {
-                    currentState = state.paused;
-                    postMessage({ type: MessageType.Input });
+                    if (input.done) {
+                        currentState = state.paused;
+                        postMessage({ type: MessageType.Input });
+                    } else {
+                        readStoredInput();
+                    }
                 },
             });
         }

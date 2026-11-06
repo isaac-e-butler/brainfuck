@@ -20,13 +20,15 @@ export function createElement(tag, props = {}) {
             return element;
         },
         withElement: function (predicate) {
-            return predicate(element);
+            predicate(element);
+            return this;
         },
         setParent: function (parent) {
-            if (!parent) throw new Error("No parent to attach element to");
+            if (!parent) throw new Error("No parent to set for element");
 
             try {
                 parent.appendChild(element);
+                return this;
             } catch {
                 throw new Error("Failed to attach element to parent");
             }
@@ -34,6 +36,7 @@ export function createElement(tag, props = {}) {
         setDisabled: function (disabled) {
             if (disabled) element.setAttribute("disabled", "true");
             else element.removeAttribute("disabled");
+            return this;
         },
         getImg: function () {
             const img = element.getElementsByTagName("img")[0];
@@ -44,12 +47,15 @@ export function createElement(tag, props = {}) {
         setImg: function (icon) {
             const img = this.getImg(element);
             if (img) img.src = icon;
+            return this;
         },
         addClass: function (className) {
             element.classList.add(className);
+            return this;
         },
         removeClass: function (className) {
             element.classList.remove(className);
+            return this;
         },
     };
 }

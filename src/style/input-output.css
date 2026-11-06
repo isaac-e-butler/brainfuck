@@ -26,11 +26,19 @@
 }
 
 .console {
-    display: block;
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
     background-color: black;
+}
+
+#status-content, #output-content {
+    display: flex;
+    flex-direction: column;
     padding: 0.3rem 0.6rem;
+    white-space: pre-wrap;
     font-size: 0.8rem;
+    overflow: auto;
+    width: 100%;
 }
 
 #output {
@@ -40,8 +48,6 @@
 }
 
 #status {
-    display: flex;
-    flex-direction: column;
     min-height: 2rem;
     height: 2rem;
     flex-grow: 1;

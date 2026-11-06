@@ -120,17 +120,42 @@
         .editor-status {
             background-color: rgb(35 35 35);
             flex-direction: row-reverse;
+            align-items: center;
             line-height: 0.8rem;
+            font-size: 0.75rem;
             position: sticky;
             display: flex;
             height: 0.8rem;
             width: 100%;
             bottom: 0;
             left: 0;
+            gap: 0.1rem;
 
             .editor-status-text {
-                font-size: 0.75rem;
                 padding: 0 0.4rem;
+            }
+
+            .editor-status-btn-group {
+                display: inline-flex;
+                
+                button {
+                    background-color: rgb(60 60 60);
+                    color: rgb(230 230 230);
+                    font-family: "syne-mono";
+                    transition: ease 250ms;
+                    line-height: inherit;
+                    padding: 0 0.6rem;
+                    cursor: pointer;
+                    border: none;
+
+                    &.active {
+                        filter: invert();
+                    }
+
+                    &:not(&.active):hover {
+                        background-color: rgb(80 80 80);
+                    }
+                }
             }
         }
     }

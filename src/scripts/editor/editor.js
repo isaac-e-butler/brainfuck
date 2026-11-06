@@ -1,3 +1,4 @@
+import { createElement } from "../helpers/element.js";
 import { handleInputEvent, handleKeyEvent, handleMouseEvent, handlePasteEvent } from "./events/index.js";
 
 export class Editor {
@@ -41,7 +42,7 @@ export class Editor {
                         return result;
                     }
                 },
-            }
+            },
         );
 
         this.cursorAnimationTimeout = undefined;
@@ -60,13 +61,45 @@ export class Editor {
                 duration: this.cursorAnimationDurationMS,
                 direction: "alternate",
                 easing: "cubic-bezier(1, 0, 0, 1)",
-            }
+            },
         );
 
         this.cursorPositionStatus = document.createElement("div");
         this.cursorPositionStatus.className = "editor-status-text";
         this.cursorPositionStatus.innerText = this.cursorPosition.toString();
         this.status.appendChild(this.cursorPositionStatus);
+
+        this.languageOptions = ["bf", "asm"];
+        this.activeLanguage = this.languageOptions[0];
+        this.languageButtonGroup = document.createElement("div");
+        this.languageButtonGroup.className = "editor-status-btn-group";
+        this.languageButtonChildren = new Map(
+            this.languageOptions.map((option) => [
+                option,
+                {
+                    btnWrapper: createElement("button", { id: option.toLowerCase() }),
+                    setActive: null,
+                },
+            ]),
+        );
+        for (const option of this.languageOptions) {
+            const { btnWrapper } = this.languageButtonChildren.get(option);
+            if (option === this.activeLanguage) btnWrapper.addClass("active");
+
+            btnWrapper.setParent(this.languageButtonGroup).withElement((element) => {
+                const setActive = () => {
+                    this.activeLanguage = option;
+                    for (const [id, { btnWrapper: otherBtn }] of this.languageButtonChildren.entries()) {
+                        if (id === option) btnWrapper.addClass("active");
+                        else otherBtn.removeClass("active");
+                    }
+                };
+                element.innerText = option.toUpperCase();
+                element.onclick = setActive;
+                this.languageButtonChildren.set(option, { btnWrapper, setActive });
+            });
+        }
+        this.status.appendChild(this.languageButtonGroup);
 
         const [lineNumber, line] = this.insertLine();
         this.focusedLineNumber = lineNumber;
@@ -85,6 +118,15 @@ export class Editor {
         this.inputReceiver.addEventListener("blur", () => this.blur());
 
         this.focusAtCursor();
+    }
+
+    setActiveLanguage(language) {
+        if (this.languageButtonChildren.has(language)) {
+            const { setActive } = this.languageButtonChildren.get(language);
+            setActive();
+        } else {
+            console.error(`Unsupported language: "${language}"`);
+        }
     }
 
     insertText(text) {

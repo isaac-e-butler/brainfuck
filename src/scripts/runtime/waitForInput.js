@@ -3,15 +3,12 @@ import { inputBox, status } from "../components/index.js";
 function parseInput(target) {
     const value = Object.fromEntries(new FormData(target)).input;
 
-    if (value.length > 1 && value.startsWith("\\")) {
-        return parseInt(value.substring(1));
+    const output = [];
+    for (let i = 0; i < value.length; i++) {
+        output.push(value.charCodeAt(i));
     }
 
-    if (value.length === 1) {
-        return value.charCodeAt(0);
-    }
-
-    return undefined;
+    return output;
 }
 
 export async function waitForInput(controller) {
@@ -23,18 +20,10 @@ export async function waitForInput(controller) {
 
         async function handleInput(event) {
             const parsedValue = parseInput(event.target);
-
-            if (Number.isSafeInteger(parsedValue)) {
-                controller.removeExitCodeListener(processAborted);
-                inputBox.disable(handleInput);
-
-                status.addInfo(`Program received value '${parsedValue}'`);
-                resolve(parsedValue);
-            } else {
-                status.addWarning("Input must be a single character - raw numbers must be prefixed with a '\\'");
-                inputBox.clear();
-                inputBox.focus();
-            }
+            controller.removeExitCodeListener(processAborted);
+            inputBox.disable(handleInput);
+            status.addInfo(`Program received char codes: '${parsedValue.join(" ")}'`);
+            resolve(parsedValue);
         }
 
         inputBox.enable(handleInput);
