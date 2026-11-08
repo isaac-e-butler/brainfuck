@@ -1,9 +1,13 @@
+import { status } from "../../components/index.js";
 import AssemblySyntaxFactory from "./assembly/syntaxFactory.js";
 import { syntax } from "./syntax.js";
 
 export function getInstructions(text, code) {
     if (code?.toUpperCase() === "ASM") {
-        return new AssemblySyntaxFactory().transpile(text);
+        status.addInfo("Program transpiling from ASM");
+        const { output, details } = new AssemblySyntaxFactory().transpile(text);
+        status.addInfo(`Program finished transpiling: blocks=${details.blocks}, address_range=${details.addrRange}`);
+        return output;
     }
 
     return extractInstructions(text);
