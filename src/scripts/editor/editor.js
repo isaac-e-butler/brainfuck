@@ -205,7 +205,9 @@ export class Editor {
             const currentLine = this.cursor.parentElement;
             currentLine.insertAdjacentElement("afterend", line);
 
-            const childrenAfterCursor = Array.from(currentLine.childNodes).splice(this.cursorPosition.column + 1);
+            const lineChildNodes = Array.from(currentLine.childNodes);
+            const indexOfCursor = lineChildNodes.indexOf(this.cursor) ?? 0;
+            const childrenAfterCursor = lineChildNodes.slice(indexOfCursor + 1);
             line.append(...childrenAfterCursor);
         } else {
             line.appendChild(this.cursor);
