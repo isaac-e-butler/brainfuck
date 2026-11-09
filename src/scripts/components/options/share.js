@@ -1,23 +1,25 @@
-import { Compressor, Decompressor, Encoder } from "../../compression/index.js";
+import { Deflate } from "../../compression/index.js";
 import { attachClickAnimation, createElement } from "../../helpers/index.js";
 
 const icon = "./src/icons/actions/share.svg";
 
-function share(state) {
+async function share(state) {
     const text = state.editor.readText();
     if (!text) return;
 
-    const compressedText = new Compressor().compress(text);
-    const encodedText = new Encoder().encode(compressedText);
     const language = state.editor.activeLanguage?.toLowerCase() ?? "bf";
+    const compressedText = await new Deflate().compress(text);
 
     const url = new URL(window.location.href);
-    url.search = new URLSearchParams({ t: encodedText, l: language });
+    url.search = new URLSearchParams({ c: compressedText, l: language });
 
     window.history.pushState("shared-program", "", url);
 }
 
-function loadPreviousShare(state) {
+let latestLoad = 0;
+
+async function loadPreviousShare(state) {
+    const load = ++latestLoad;
     const searchParams = new URLSearchParams(window.location.search);
 
     const language = searchParams.get("l");
@@ -25,17 +27,19 @@ function loadPreviousShare(state) {
         state.editor.setActiveLanguage(language);
     }
 
-    const encodedText = searchParams.get("t");
-    if (!encodedText) {
+    const compressedText = searchParams.get("c");
+
+    try {
+        const sharedText = compressedText && (await new Deflate().decompress(compressedText));
+        if (load !== latestLoad) return;
+
         state.editor.resetContent();
-        return;
+        if (sharedText) {
+            state.editor.insertText(sharedText);
+        }
+    } catch (error) {
+        console.error("Failed to load program from URL", error);
     }
-
-    const decodedText = new Encoder().decode(encodedText);
-    const decompressedText = new Decompressor().decompress(decodedText);
-
-    state.editor.resetContent();
-    state.editor.insertText(decompressedText);
 }
 
 export function initialise(parent, state) {
