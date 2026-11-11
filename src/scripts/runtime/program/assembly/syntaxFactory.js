@@ -1,4 +1,4 @@
-import parse from "./parse.js";
+import parseSyntax from "./parseSyntax.js";
 
 class AssemblySyntaxFactory {
     #output = "";
@@ -101,7 +101,7 @@ class AssemblySyntaxFactory {
     }
 
     resolveCell(arg, cmd) {
-        if (arg?.kind !== "cell") throw new Error(`Line ${cmd.lineNumber}: ${cmd.operand} expects an address [N]`);
+        if (arg?.kind !== "cell") throw new Error(`Line ${cmd.lineNumber}: ${cmd.operator} expects an address [N]`);
         if (arg?.value >= this.#addrRange)
             throw new Error(
                 `Line ${cmd.lineNumber}: [${arg.value}] is greater than the address_range [0]..[${this.#addrRange - 1}]`,
@@ -110,7 +110,7 @@ class AssemblySyntaxFactory {
     }
 
     resolveLabel(arg, cmd, labels) {
-        if (arg?.kind !== "label") throw new Error(`Line ${cmd.lineNumber}: ${cmd.operand} expects a label`);
+        if (arg?.kind !== "label") throw new Error(`Line ${cmd.lineNumber}: ${cmd.operator} expects a label`);
 
         const target = labels.get(arg.value);
         if (target === undefined) throw new Error(`Line ${cmd.lineNumber}: unknown label "${arg.value}"`);
@@ -148,7 +148,7 @@ class AssemblySyntaxFactory {
         const [arg1, arg2] = cmd.args;
         const cell = this.resolveCell(arg1, cmd);
 
-        switch (cmd.operand) {
+        switch (cmd.operator) {
             case "MOV":
                 if (arg2?.kind === "value") this.set(cell, arg2.value);
                 else if (this.resolveCell(arg2, cmd) !== cell) {
@@ -158,7 +158,7 @@ class AssemblySyntaxFactory {
                 break;
             case "ADD":
             case "SUB":
-                const sign = cmd.operand === "ADD" ? "+" : "-";
+                const sign = cmd.operator === "ADD" ? "+" : "-";
                 if (arg2?.kind === "value") this.insertAt(cell, sign.repeat(arg2.value));
                 else {
                     const target = this.resolveCell(arg2, cmd);
@@ -178,7 +178,7 @@ class AssemblySyntaxFactory {
                 this.insertAt(cell, ",");
                 break;
             default:
-                throw new Error(`Line ${cmd.lineNumber}: unknown operand ${cmd.operand}`);
+                throw new Error(`Line ${cmd.lineNumber}: unknown operator ${cmd.operator}`);
         }
     }
 
@@ -194,7 +194,7 @@ class AssemblySyntaxFactory {
         }
 
         const [arg1, arg2] = endCmd.args;
-        switch (endCmd.operand) {
+        switch (endCmd.operator) {
             case "HALT":
                 this.set(this.#cell.runState, 0);
                 break;
@@ -220,7 +220,7 @@ class AssemblySyntaxFactory {
                 break;
             }
             default:
-                throw new Error(`Line ${endCmd.lineNumber}: unknown jump ${endCmd.operand}`);
+                throw new Error(`Line ${endCmd.lineNumber}: unknown jump ${endCmd.operator}`);
         }
     }
 
@@ -238,7 +238,7 @@ class AssemblySyntaxFactory {
     }
 
     transpile(source) {
-        const { blocks, labels, addrRange } = parse(source);
+        const { blocks, labels, addrRange } = parseSyntax(source);
         this.#output = "";
         this.#pointer = 0;
         this.#addrRange = addrRange;
@@ -248,7 +248,7 @@ class AssemblySyntaxFactory {
 
         if (blocks.length > 255) throw new Error(`Block limit of ${255} reached: ${blocks.length} blocks`);
 
-        blocks.push({ body: [], end: { operand: "HALT", args: [], line: 0 } });
+        blocks.push({ body: [], end: { operator: "HALT", args: [], line: 0 } });
 
         this.set(this.#cell.runState, 1);
         this.insertAt(this.#cell.runState, "[");
