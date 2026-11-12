@@ -1,4 +1,6 @@
-const container = document.createElement("div");
+import { createElement } from "../helpers/element.js";
+
+const container = createElement("div", { class: "editor-modal-container" });
 let afterEffect = undefined;
 let active = false;
 
@@ -9,51 +11,49 @@ export function open(props) {
     afterEffect = props.afterEffect;
     active = true;
 
-    container.className = "editor-modal-container";
+    const title = createElement("div", {
+        class: "editor-modal-title",
+        children: [titleText],
+    });
 
-    const title = document.createElement("div");
-    title.className = "editor-modal-title";
-    title.append(titleText);
+    const confirmButton = createElement("button", {
+        class: "editor-modal-confirm",
+        children: [confirmText],
+    })
+        .addClass("destructive", destructive)
+        .withElement((btn) =>
+            btn.addEventListener(
+                "click",
+                () => {
+                    action();
+                    close();
+                },
+                { once: true },
+            ),
+        );
 
-    const confirmButton = document.createElement("button");
-    confirmButton.className = "editor-modal-confirm";
-    if (destructive) {
-        confirmButton.classList.add("destructive");
-    }
-    confirmButton.append(confirmText);
-
-    const cancelButton = document.createElement("button");
-    cancelButton.className = "editor-modal-cancel";
-    cancelButton.append(cancelText);
-
-    const buttons = document.createElement("div");
-    buttons.className = "editor-modal-buttons";
-    buttons.append(confirmButton, cancelButton);
-
+    const cancelButton = createElement("button", {
+        class: "editor-modal-cancel",
+        children: [cancelText],
+    }).withElement((btn) => btn.addEventListener("click", () => close(), { once: true }));
     window.addEventListener("popstate", () => close(), { once: true });
-    cancelButton.addEventListener("click", () => close(), { once: true });
-    confirmButton.addEventListener(
-        "click",
-        () => {
-            action();
-            close();
-        },
-        { once: true }
-    );
 
-    const modal = document.createElement("div");
-    modal.className = "editor-modal border";
-    modal.append(title, buttons);
-    container.appendChild(modal);
-    parent.appendChild(container);
+    const buttons = createElement("div", {
+        class: "editor-modal-buttons",
+        children: [confirmButton, cancelButton],
+    });
+
+    const modal = createElement("div", {
+        class: "editor-modal border",
+        children: [title, buttons],
+    });
+    container.addChildren([modal]).setParent(parent);
 }
 
 export function close() {
     if (!active) return;
 
-    const parent = container.parentElement;
-    container.replaceChildren();
-    parent.removeChild(container);
+    container.removeAllChildren().removeSelf();
 
     active = false;
     afterEffect?.call();
