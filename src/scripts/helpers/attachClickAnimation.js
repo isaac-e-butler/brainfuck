@@ -1,6 +1,6 @@
 export function attachClickAnimation(element) {
     if (!element) {
-        throw new Error("No element to attach events to");
+        throw new Error("No element to attach events");
     }
 
     let timeout = undefined;
